@@ -28,7 +28,7 @@
     "include": [
       "LICENSE",
       "README.md",
-      "README_js.md",
+      "README_ja.md",
       "deno.json",
       "import_map.json",
       "src/**/*.ts",
