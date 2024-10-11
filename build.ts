@@ -43,6 +43,9 @@ await build({
   minify: true,
   sourcemap: true,
   resolveExtensions: [".ts"],
+  outExtension: {
+    ".js": ".mjs"
+  },
   plugins: [denoCachePlugin(entryPoints)],
 });
 
