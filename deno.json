@@ -9,7 +9,8 @@
     "test-simpleUsage": "deno test --allow-all ./test/simpleUsage.ts",
     "test-i18next": "deno test --allow-all ./test/i18next.ts",
     "test-customValidator": "deno test --allow-all ./test/customValidator.ts",
-    "test-i18nextValidator": "deno test --allow-all ./test/i18nextValidator.ts"
+    "test-i18nextValidator": "deno test --allow-all ./test/i18nextValidator.ts",
+    "build": "deno run --allow-read --allow-write --allow-net --allow-env --allow-run build.ts"
   },
   "importMap": "import_map.json",
   "compilerOptions": {
