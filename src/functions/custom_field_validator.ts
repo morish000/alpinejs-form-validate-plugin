@@ -1,3 +1,8 @@
+/**
+ * @module customFieldValidator
+ * This module provides a function to create a custom field validator using specified validation functions.
+ */
+
 import type { FunctionParameter } from "../types/config_types.ts";
 import type {
   CustomFieldValidator,

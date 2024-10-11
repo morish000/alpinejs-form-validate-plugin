@@ -1,3 +1,8 @@
+/**
+ * @module inputRateLimitter
+ * This module provides a factory to create an input rate limitter using debounce or throttle techniques.
+ */
+
 import type { Debounce, Throttle } from "../types/utils_types.ts";
 import type { InputRateLimitterCreator } from "../types/functions_types.ts";
 

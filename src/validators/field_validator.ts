@@ -1,3 +1,8 @@
+/**
+ * @module fieldValidator
+ * This module provides functionality to create a field validator function for validating form field elements in Alpine.js applications.
+ */
+
 import type { Alpine } from "alpinejs";
 import type { FieldValidationConfig } from "../types/config_types.ts";
 import type { CreateFieldValidator } from "../types/validators_types.ts";

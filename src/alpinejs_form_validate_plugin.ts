@@ -1,3 +1,8 @@
+/**
+ * @module validationPlugin
+ * This module provides a validation plugin for Alpine.js, enabling form and field validations.
+ */
+
 import type {
   DirectiveData,
   DirectiveUtilities,

@@ -1,4 +1,8 @@
-// form config
+/**
+ * @module FormValidationConfig
+ * 
+ * Provides configurations for form and field validation.
+ */
 
 /**
  * A type for deep optional properties in an object.
@@ -40,8 +44,6 @@ export type FormValidationConfig = {
  * @typedef {DeepOptional<FormValidationConfig>} FormValidationOption
  */
 export type FormValidationOption = DeepOptional<FormValidationConfig>;
-
-// field config
 
 /**
  * Configuration options for field validation.

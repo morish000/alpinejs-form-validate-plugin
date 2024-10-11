@@ -1,3 +1,8 @@
+/**
+ * @module objectMergeUtility
+ * This module provides a utility function to deeply merge multiple objects into the first object.
+ */
+
 // deno-lint-ignore-file no-explicit-any
 
 /**

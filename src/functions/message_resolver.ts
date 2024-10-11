@@ -1,3 +1,8 @@
+/**
+ * @module messageResolver
+ * This module provides a factory to create a message resolver for handling message operations.
+ */
+
 import type { FunctionParameter } from "../types/config_types.ts";
 import type { MessageResolver } from "../types/functions_types.ts";
 

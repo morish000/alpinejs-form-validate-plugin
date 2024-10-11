@@ -1,3 +1,8 @@
+/**
+ * @module messageConfigFormatter
+ * This module provides a function to format message configurations, ensuring each message value is an array.
+ */
+
 import type {
   MessageConfig,
   MessageOption,

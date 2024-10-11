@@ -1,3 +1,9 @@
+/**
+ * @module ValidatorFactory
+ * 
+ * Provides types for creating form and field validators using configuration and helper functions.
+ */
+
 import type { Alpine } from "./alpine_types.ts";
 import type {
   FieldValidationConfig,

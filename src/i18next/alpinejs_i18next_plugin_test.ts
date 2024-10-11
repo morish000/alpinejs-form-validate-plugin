@@ -149,7 +149,8 @@ Deno.test("Alpine directive i18next-text updates element text", () => {
 
   const effect = (callback: () => void) => callback();
 
-  directiveSpy.calls[0].args[1](
+  // deno-lint-ignore ban-types
+  (directiveSpy.calls[0].args[1]  as Function)(
     el,
     { expression: "" } as DirectiveData,
     { evaluateLater, effect } as DirectiveUtilities,

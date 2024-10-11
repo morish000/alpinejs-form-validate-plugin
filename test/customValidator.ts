@@ -35,7 +35,7 @@ globalThis.CustomEvent = CustomEvent;
 globalThis.HTMLInputElement = HTMLInputElement;
 globalThis.HTMLSelectElement = HTMLSelectElement;
 
-const { default: Alpine } = await import("alpinejs");
+const { Alpine } = await import("alpinejs");
 
 const alpineInitializeWaiter = () => {
   let alpineInitialized = false;

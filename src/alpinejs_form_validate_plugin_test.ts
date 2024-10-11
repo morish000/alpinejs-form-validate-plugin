@@ -50,7 +50,7 @@ Deno.test("validate-form directive - sets initial validation configuration", () 
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1];
+  const callback = directiveSpy.calls[0].args[1] as Function;
 
   const mockElement = {
     addEventListener: spy((_event: string, _handler: any) => {}),
@@ -103,7 +103,7 @@ Deno.test("validate-form directive - overrides default configuration", () => {
     },
   })(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1];
+  const callback = directiveSpy.calls[0].args[1] as Function;
 
   const mockElement = {
     addEventListener: spy((_event: string, _handler: any) => {}),
@@ -189,7 +189,7 @@ Deno.test("validate-form directive - triggers validation event on success", () =
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1];
+  const callback = directiveSpy.calls[0].args[1] as Function;
 
   const mockElement = {
     addEventListener: spy((_event: string, _handler: any) => {}),
@@ -232,7 +232,7 @@ Deno.test("validate-form directive - triggers validation event on failure", () =
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1];
+  const callback = directiveSpy.calls[0].args[1] as Function;
 
   const mockElement = {
     addEventListener: spy((_event: string, _handler: any) => {}),
@@ -296,7 +296,7 @@ Deno.test("validate directive - initializes validation config and triggers succe
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1];
+  const callback = directiveSpy.calls[1].args[1] as Function;
 
   const mockElement = {
     id: "testField",
@@ -371,7 +371,7 @@ Deno.test("validate directive - initializes and triggers failure event", () => {
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1];
+  const callback = directiveSpy.calls[1].args[1] as Function;
 
   const mockElement = {
     id: "testField",
@@ -459,7 +459,7 @@ Deno.test("validate directive - executes before/after hooks on failure", async (
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1];
+  const callback = directiveSpy.calls[1].args[1] as Function;
 
   const mockElement = {
     id: "testField",
@@ -595,7 +595,7 @@ Deno.test("validate directive - no event listeners on all false config", () => {
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1];
+  const callback = directiveSpy.calls[1].args[1] as Function;
 
   const mockElement = {
     id: "testField",
@@ -664,7 +664,7 @@ Deno.test("validate directive - calls reportValidity on failure with report opti
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1];
+  const callback = directiveSpy.calls[1].args[1] as Function;
 
   const mockElement = {
     id: "testField",
@@ -724,7 +724,7 @@ Deno.test("validate directive - registers event listeners for checkboxes and rad
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1];
+  const callback = directiveSpy.calls[1].args[1] as Function;
 
   const jsdom = new JSDOM(
     `<!DOCTYPE html>
@@ -940,7 +940,7 @@ Deno.test("validate directive - Handles listeners for standalone checkboxes and 
     },
   })(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1];
+  const callback = directiveSpy.calls[1].args[1] as Function;
 
   const jsdom = new JSDOM(
     `<!DOCTYPE html>
@@ -1033,7 +1033,7 @@ Deno.test("validate-message-for directive - shows validation message", () => {
     },
   })(Alpine);
 
-  const callback = directiveSpy.calls[2].args[1];
+  const callback = directiveSpy.calls[2].args[1] as Function;
 
   const mockElement = {
     textContent: "",

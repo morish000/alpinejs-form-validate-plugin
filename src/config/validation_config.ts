@@ -1,3 +1,8 @@
+/**
+ * @module validationConfigFormatter
+ * This module provides a function to format a validation configuration from an abbreviated form to a full ValidationConfig object.
+ */
+
 import type {
   FunctionParameter,
   ValidationConfig,

@@ -32,7 +32,7 @@ globalThis.document = document;
 globalThis.MutationObserver = MutationObserver;
 globalThis.CustomEvent = CustomEvent;
 
-const { default: Alpine } = await import("alpinejs");
+const { Alpine } = await import("alpinejs");
 
 const alpineInitializeWaiter = () => {
   let alpineInitialized = false;

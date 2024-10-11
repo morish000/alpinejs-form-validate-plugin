@@ -1,3 +1,9 @@
+/**
+ * @module ValidationFunctions
+ * 
+ * A collection of types and definitions for handling form validation and message resolution.
+ */
+
 import type { Alpine } from "alpinejs";
 import type {
   FieldValidationConfig,

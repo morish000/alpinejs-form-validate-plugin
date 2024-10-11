@@ -1,3 +1,8 @@
+/**
+ * @module fieldValueResolver
+ * This module provides a function to create a resolver for field values, supporting various input types.
+ */
+
 import type {
   FieldValueResolver,
   FormFieldValues,

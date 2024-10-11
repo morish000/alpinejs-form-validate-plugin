@@ -1,3 +1,8 @@
+/**
+ * @module validationConfigDefaults
+ * This module provides default configurations for form and field validation.
+ */
+
 import type {
   FieldValidationConfig,
   FormValidationConfig,

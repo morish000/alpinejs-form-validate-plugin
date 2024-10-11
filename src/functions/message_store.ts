@@ -1,3 +1,8 @@
+/**
+ * @module messageStore
+ * This module provides a factory to create a message store for managing message values associated with DOM elements in Alpine.js applications.
+ */
+
 import type { Alpine } from "alpinejs";
 import type {
   CreateMessageStore,

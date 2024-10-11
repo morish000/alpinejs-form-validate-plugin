@@ -1,3 +1,8 @@
+/**
+ * @module i18nMessageResolver
+ * This module provides a function to create a message resolver using i18next for internationalization support.
+ */
+
 import type { Alpine } from "alpinejs";
 import type { AlpineWithWatch } from "../types/alpine_types.ts";
 import type { FunctionParameter } from "../types/config_types.ts";

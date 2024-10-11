@@ -1,3 +1,8 @@
+/**
+ * @module debounceUtility
+ * This module provides a debounce utility function to delay invoking a function until after a specified wait time.
+ */
+
 // deno-lint-ignore no-unused-vars
 import type { Debounce, LimittedHandler } from "../types/utils_types.ts";
 

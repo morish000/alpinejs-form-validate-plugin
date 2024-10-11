@@ -1,4 +1,10 @@
 /**
+ * @module RateLimiters
+ * 
+ * Provides types and utility functions for debouncing and throttling event handlers.
+ */
+
+/**
  * A type representing a function that limits the execution rate of another function
  * using the debounce technique.
  *

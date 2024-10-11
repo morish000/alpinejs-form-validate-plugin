@@ -1,3 +1,8 @@
+/**
+ * @module throttleUtility
+ * This module provides a throttle utility function to limit the rate at which a specified function can be invoked.
+ */
+
 // deno-lint-ignore no-unused-vars
 import type { LimittedHandler, Throttle } from "../types/utils_types.ts";
 

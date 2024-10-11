@@ -2,13 +2,13 @@
   "imports": {
     "alpinejs": "npm:alpinejs@3.14.x",
     "i18next": "npm:i18next@23.x",
-    "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-    "i18next-fs-backend": "https://esm.sh/i18next-fs-backend@2.x",
-    "i18next-browser-languagedetector": "https://esm.sh/i18next-browser-languagedetector@8.x",
-    "jsdom": "https://esm.sh/jsdom@25.x",
-    "validator": "https://esm.sh/validator@13.12.x",
-    "@testing-library/dom": "https://esm.sh/@testing-library/dom@10.4.x",
-    "@types/alpinejs": "https://esm.sh/@types/alpinejs@3.13.x",
-    "@types/validator": "https://esm.sh/@types/validator@13.12.x"
+    "i18next-http-backend": "npm:i18next-http-backend@2.x",
+    "i18next-fs-backend": "npm:i18next-fs-backend@2.x",
+    "i18next-browser-languagedetector": "npm:i18next-browser-languagedetector@8.x",
+    "jsdom": "npm:jsdom@25.x",
+    "validator": "npm:validator@13.12.x",
+    "@testing-library/dom": "npm:@testing-library/dom@10.4.x",
+    "@types/alpinejs": "npm:@types/alpinejs@3.13.x",
+    "@types/validator": "npm:@types/validator@13.12.x"
   }
 }

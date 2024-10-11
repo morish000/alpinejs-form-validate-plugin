@@ -1,3 +1,8 @@
+/**
+ * @module formValidator
+ * This module provides functionality to create a form validation function for validating form elements in Alpine.js applications.
+ */
+
 import type { FormValidationConfig } from "../types/config_types.ts";
 import type { CreateFormValidator } from "../types/validators_types.ts";
 

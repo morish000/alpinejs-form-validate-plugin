@@ -1,3 +1,9 @@
+/**
+ * @module AlpineExtensions
+ * 
+ * This module extends the Alpine interface to include additional functionality.
+ */
+
 import type { Alpine } from "alpinejs";
 export type { Alpine } from "alpinejs";
 

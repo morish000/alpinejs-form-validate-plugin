@@ -1,3 +1,8 @@
+/**
+ * @module alpineI18NextPlugin
+ * This module provides an i18Next plugin for Alpine.js to facilitate internationalization.
+ */
+
 import type { i18n, TOptions } from "i18next";
 import type {
   Alpine,
