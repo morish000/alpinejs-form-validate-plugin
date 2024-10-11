@@ -1,8 +1,3 @@
-# このドキュメントは作成中です
-
-`import`のやり方がレジストリに登録しないと確認できないため、`import`先のURLが相対パスになっています。  
-ドキュメント作成時点の動作確認は`esbuild`を使用してトランスパイルし、Webサーバに配置して実施しました。
-
 # Form Validate Plugin for Alpine.js.
 
 [Alpine.js](https://alpinejs.dev/)で`Form Validation`を行うためのプラグインです。  
@@ -46,13 +41,13 @@ ESMのみ対応しています。
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
       }
     }
   </script>
   <script type="module">
     import Alpine from 'alpinejs';
-    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       Alpine.plugin(createValidatePluginDefault);
       Alpine.start();
@@ -496,7 +491,7 @@ Alpine.plugin(  createValidatePlugin({
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
       }
     }
   </script>
@@ -504,7 +499,7 @@ Alpine.plugin(  createValidatePlugin({
     import Alpine from 'alpinejs';
     import i18next from 'i18next';
     import i18nextHttpBackend from 'i18next-http-backend';
-    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       i18next.on("initialized", () => {
         const i18nStore = Alpine.reactive(
@@ -614,13 +609,13 @@ const i18nStore = Alpine.store('i18next');
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
       }
     }
   </script>
   <script type="module">
     import Alpine from 'alpinejs';
-    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       Alpine.plugin(createValidatePluginDefault);
       Alpine.start();
@@ -701,15 +696,16 @@ const i18nStore = Alpine.store('i18next');
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "validator": "https://esm.sh/validator@13.12.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/functions/index.mjs"
       }
     }
   </script>
   <script type="module">
     import Alpine from 'alpinejs';
     import validator from 'validator';
-    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
-    import { createCustomFieldValidator } from '@morish000/alpinejs_form_validate_plugin/functions/index.mjs';
+    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin';
+    import { createCustomFieldValidator } from '@morish000/alpinejs_form_validate_plugin/functions';
 
     document.addEventListener("DOMContentLoaded", () => {
       Alpine.plugin(createValidatePlugin({
@@ -793,7 +789,9 @@ const i18nStore = Alpine.store('i18next');
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/alpinejs_i18next_plugin.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/i18next_message_resolver.mjs"
       }
     }
   </script>
@@ -801,9 +799,9 @@ const i18nStore = Alpine.store('i18next');
     import Alpine from 'alpinejs';
     import i18next from 'i18next';
     import i18nextHttpBackend from 'i18next-http-backend';
-    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin.mjs';
-    import { createI18NextMessageResolver } from "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver.mjs";
-    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin';
+    import { createI18NextMessageResolver } from "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver";
+    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       i18next.on("initialized", () => {
         const i18nStore = Alpine.reactive(

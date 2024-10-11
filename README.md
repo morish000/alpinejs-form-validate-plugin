@@ -1,10 +1,5 @@
 > This document was originally written in Japanese, and the English version is machine translated. For the original, please refer to [README_ja.md](README_ja.md).
 
-# This Document is Under Construction
-
-The `import` method cannot be verified without registry registration, so the `import` path is provided as a relative URL.  
-At the time of creating the document, the operation was confirmed by transpiling using `esbuild` and deploying to a web server.
-
 # Form Validate Plugin for Alpine.js
 
 This is a plugin for performing `form validation` with [Alpine.js](https://alpinejs.dev/).  
@@ -48,13 +43,13 @@ Only supports ESM.
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
       }
     }
   </script>
   <script type="module">
     import Alpine from 'alpinejs';
-    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       Alpine.plugin(createValidatePluginDefault);
       Alpine.start();
@@ -497,7 +492,7 @@ Assuming message resource files are placed on the server at the following paths:
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
       }
     }
   </script>
@@ -505,7 +500,7 @@ Assuming message resource files are placed on the server at the following paths:
     import Alpine from 'alpinejs';
     import i18next from 'i18next';
     import i18nextHttpBackend from 'i18next-http-backend';
-    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       i18next.on("initialized", () => {
         const i18nStore = Alpine.reactive(
@@ -615,13 +610,13 @@ An example of using [Bootstrap](https://getbootstrap.com/) to output validation 
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
       }
     }
   </script>
   <script type="module">
     import Alpine from 'alpinejs';
-    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createValidatePluginDefault } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       Alpine.plugin(createValidatePluginDefault);
       Alpine.start();
@@ -702,15 +697,16 @@ Specify it in the parameter of the `createValidatePlugin` function during initia
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "validator": "https://esm.sh/validator@13.12.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/functions/index.mjs"
       }
     }
   </script>
   <script type="module">
     import Alpine from 'alpinejs';
     import validator from 'validator';
-    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
-    import { createCustomFieldValidator } from '@morish000/alpinejs_form_validate_plugin/functions/index.mjs';
+    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin';
+    import { createCustomFieldValidator } from '@morish000/alpinejs_form_validate_plugin/functions';
 
     document.addEventListener("DOMContentLoaded", () => {
       Alpine.plugin(createValidatePlugin({
@@ -794,7 +790,9 @@ An example using `i18next` for message resources.
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin/": "/@morish000/alpinejs_form_validate_plugin/"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/alpinejs_i18next_plugin.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/i18next_message_resolver.mjs"
       }
     }
   </script>
@@ -802,9 +800,9 @@ An example using `i18next` for message resources.
     import Alpine from 'alpinejs';
     import i18next from 'i18next';
     import i18nextHttpBackend from 'i18next-http-backend';
-    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin.mjs';
-    import { createI18NextMessageResolver } from "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver.mjs";
-    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin/mod.mjs';
+    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin';
+    import { createI18NextMessageResolver } from "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver";
+    import { createValidatePlugin } from '@morish000/alpinejs_form_validate_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       i18next.on("initialized", () => {
         const i18nStore = Alpine.reactive(
