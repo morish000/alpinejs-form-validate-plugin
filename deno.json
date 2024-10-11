@@ -1,0 +1,38 @@
+{
+  "name": "@morish000/alpinejs-form-validate-plugin",
+  "version": "0.1.0",
+  "tasks": {
+    "lint": "deno lint ./src/mod.ts",
+    "test": "rm -rf ./build/cov_profile && deno test --allow-all --coverage=./build/cov_profile src && deno coverage ./build/cov_profile --lcov > ./build/coverage.lcov && genhtml --branch-coverage --highlight --legend --function-coverage -o ./build/html_coverage ./build/coverage.lcov",
+    "jsdoc-lint": "deno doc --lint ./src/mod.ts",
+    "jsdoc": "rm -rf ./build/jsdoc && deno doc --html --name='alpinejs-form-validate-plugin' --output=./build/jsdoc/ ./src/mod.ts",
+    "test-simpleUsage": "deno test --allow-all ./test/simpleUsage.ts",
+    "test-i18next": "deno test --allow-all ./test/i18next.ts",
+    "test-customValidator": "deno test --allow-all ./test/customValidator.ts",
+    "test-i18nextValidator": "deno test --allow-all ./test/i18nextValidator.ts"
+  },
+  "importMap": "import_map.json",
+  "compilerOptions": {
+    "lib": ["dom", "deno.ns"]
+  },
+  "exports": {
+    ".": "./src/mod.ts",
+    "./config": "./src/config/index.ts",
+    "./functions": "./src/functions/index.ts",
+    "./i18next/alpinejs_i18next_plugin": "./src/i18next/alpinejs_i18next_plugin.ts",
+    "./i18next/i18next_message_resolver": "./src/i18next/i18next_message_resolver.ts",
+    "./utils": "./src/utils/index.ts",
+    "./validators": "./src/validators/index.ts"
+  },
+  "publish": {
+    "include": [
+      "LICENSE",
+      "README.md",
+      "README_js.md",
+      "deno.json",
+      "import_map.json",
+      "src/**/*.ts",
+      "test/**/*.*"
+    ]
+  }
+}
