@@ -25,9 +25,47 @@
 そのため、同一の`name`属性を持つラジオボタン、および、チェックボックスには`validate`ディレクティブをどれか1つの要素のみに書くことを想定しています。  
 複数書いた場合の動作は考慮していません。
 
+# CodePenでのサンプル
+
+- [ブラウザのバルーンメッセージでエラー表示（デフォルト）](https://codepen.io/morish000/pen/abemgrr)
+- [Bootstrapを使ったエラー表示](https://codepen.io/morish000/pen/eYqgxZq)
+- [i18nextでメッセージを国際化する例](https://codepen.io/morish000/pen/rNXjRyw)
+
 # Simple Usage
 
 ESMのみ対応しています。
+
+## インポートマップのサンプル
+
+`ems.sh`からは以下のように取得できます。
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "@morish000/alpinejs_form_validate_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin",
+      "@morish000/alpinejs_form_validate_plugin/functions": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/functions",
+      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/alpinejs_i18next_plugin",
+      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/i18next_message_resolver"
+    }
+  }
+</script>
+```
+
+`jsDelivr`からは以下のように取得できます。
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+      "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/functions/index.mjs",
+      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs",
+      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/i18next_message_resolver.mjs"
+    }
+  }
+</script>
+```
 
 ## セットアップ
 
@@ -41,7 +79,7 @@ ESMのみ対応しています。
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs"
       }
     }
   </script>
@@ -352,7 +390,7 @@ HTML5標準バリデーションのメッセージを設定します。
 
 **例：**  
 ```javascript
-onChange={
+onChange = {
   before: (e?: Event) => {
     // バリデーション前の処理
   },
@@ -416,7 +454,7 @@ import { createValidatePlugin } from '・・・';
 
 ・・・
 
-Alpine.plugin(  createValidatePlugin({
+Alpine.plugin(createValidatePlugin({
   defaultFormOptions: {
     report: ...,
     trigger: {
@@ -491,7 +529,7 @@ Alpine.plugin(  createValidatePlugin({
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
+        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs"
       }
     }
   </script>
@@ -499,7 +537,7 @@ Alpine.plugin(  createValidatePlugin({
     import Alpine from 'alpinejs';
     import i18next from 'i18next';
     import i18nextHttpBackend from 'i18next-http-backend';
-    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin';
+    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       i18next.on("initialized", () => {
         const i18nStore = Alpine.reactive(
@@ -609,7 +647,7 @@ const i18nStore = Alpine.store('i18next');
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs"
       }
     }
   </script>
@@ -696,8 +734,8 @@ const i18nStore = Alpine.store('i18next');
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "validator": "https://esm.sh/validator@13.12.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
-        "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/functions/index.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/functions/index.mjs"
       }
     }
   </script>
@@ -789,9 +827,9 @@ const i18nStore = Alpine.store('i18next');
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
-        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/alpinejs_i18next_plugin.mjs",
-        "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/i18next_message_resolver.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/i18next_message_resolver.mjs"
       }
     }
   </script>

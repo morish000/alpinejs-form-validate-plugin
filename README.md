@@ -27,9 +27,47 @@ Thus, the value of radio buttons is handled as a `string`, and the value of chec
 Therefore, it is expected that the `validate` directive is written only to one element among radio buttons or checkboxes with the same `name` attribute.  
 The behavior when written to multiple elements is not considered.
 
+# Sample on CodePen
+
+- [Display Errors with Browser Balloon Message (Default)](https://codepen.io/morish000/pen/abemgrr)
+- [Display Errors Using Bootstrap](https://codepen.io/morish000/pen/eYqgxZq)
+- [Example of Internationalizing Messages with i18next](https://codepen.io/morish000/pen/rNXjRyw)
+
 # Simple Usage
 
 Only supports ESM.
+
+## Import Map Sample
+
+You can obtain it from `esm.sh` as follows:
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "@morish000/alpinejs_form_validate_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin",
+      "@morish000/alpinejs_form_validate_plugin/functions": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/functions",
+      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/alpinejs_i18next_plugin",
+      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/i18next_message_resolver"
+    }
+  }
+</script>
+```
+
+You can obtain it from `jsDelivr` as follows:
+
+```html
+<script type="importmap">
+  {
+    "imports": {
+      "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+      "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/functions/index.mjs",
+      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs",
+      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/i18next_message_resolver.mjs"
+    }
+  }
+</script>
+```
 
 ## Setup
 
@@ -43,7 +81,7 @@ Only supports ESM.
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs"
       }
     }
   </script>
@@ -492,7 +530,7 @@ Assuming message resource files are placed on the server at the following paths:
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
+        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs"
       }
     }
   </script>
@@ -500,7 +538,7 @@ Assuming message resource files are placed on the server at the following paths:
     import Alpine from 'alpinejs';
     import i18next from 'i18next';
     import i18nextHttpBackend from 'i18next-http-backend';
-    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin';
+    import { createI18NextPlugin } from '@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin';
     document.addEventListener("DOMContentLoaded", () => {
       i18next.on("initialized", () => {
         const i18nStore = Alpine.reactive(
@@ -610,7 +648,7 @@ An example of using [Bootstrap](https://getbootstrap.com/) to output validation 
     {
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs"
       }
     }
   </script>
@@ -697,8 +735,8 @@ Specify it in the parameter of the `createValidatePlugin` function during initia
       "imports": {
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "validator": "https://esm.sh/validator@13.12.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
-        "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/functions/index.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/functions/index.mjs"
       }
     }
   </script>
@@ -790,9 +828,9 @@ An example using `i18next` for message resources.
         "alpinejs": "https://esm.sh/alpinejs@3.14.x",
         "i18next": "https://esm.sh/i18next@23.x",
         "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/mod.mjs",
-        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/alpinejs_i18next_plugin.mjs",
-        "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin@0.1.2/dist/i18next/i18next_message_resolver.mjs"
+        "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs",
+        "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/i18next_message_resolver.mjs"
       }
     }
   </script>
