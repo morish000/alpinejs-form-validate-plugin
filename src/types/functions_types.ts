@@ -1,9 +1,10 @@
 /**
  * @module ValidationFunctions
- * 
+ *
  * A collection of types and definitions for handling form validation and message resolution.
  */
 
+// @deno-types="@types/alpinejs"
 import type { Alpine } from "alpinejs";
 import type {
   FieldValidationConfig,

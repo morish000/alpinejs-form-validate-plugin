@@ -9,6 +9,7 @@
     "validator": "npm:validator@13.12.x",
     "@testing-library/dom": "npm:@testing-library/dom@10.4.x",
     "@types/alpinejs": "npm:@types/alpinejs@3.13.x",
+    "@types/jsdom": "npm:@types/jsdom@21.1.x",
     "@types/validator": "npm:@types/validator@13.12.x",
     "esbuild": "https://deno.land/x/esbuild@v0.24.0/mod.js"
   }

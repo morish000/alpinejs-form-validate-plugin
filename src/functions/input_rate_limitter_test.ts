@@ -5,6 +5,7 @@ import { debounce } from "../utils/debounce.ts";
 import { throttle } from "../utils/throttle.ts";
 import type { Debounce, Throttle } from "../types/utils_types.ts";
 import type { FieldValidationConfig } from "../types/config_types.ts";
+// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 
 const {

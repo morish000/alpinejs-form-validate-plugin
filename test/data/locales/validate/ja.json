@@ -1,4 +1,4 @@
 {
-    "required": "この値は必須です。{{ name }}",
-    "moreThanChars": "{{ count }} 文字以上で入力してください。"
+  "required": "この値は必須です。{{ name }}",
+  "moreThanChars": "{{ count }} 文字以上で入力してください。"
 }

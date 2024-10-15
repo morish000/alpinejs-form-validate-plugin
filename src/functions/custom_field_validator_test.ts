@@ -2,7 +2,9 @@ import { assertFalse, assertStrictEquals } from "jsr:@std/assert";
 import { assertSpyCall, assertSpyCalls, spy } from "jsr:@std/testing/mock";
 import { createCustomFieldValidator } from "./custom_field_validator.ts";
 import type { ValidateFunctions } from "../types/functions_types.ts";
+// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
+// @deno-types="@types/validator"
 import validaorJS from "validator";
 
 const {

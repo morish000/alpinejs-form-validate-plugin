@@ -1,6 +1,6 @@
 /**
  * @module html5ValidationMessageResolver
- * This module provides a function to create a resolver for HTML5 validation messages 
+ * This module provides a function to create a resolver for HTML5 validation messages
  * based on validity state keys.
  */
 

@@ -1,6 +1,8 @@
+// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 import { fireEvent } from "@testing-library/dom";
 import { assert, assertFalse, assertStrictEquals } from "jsr:@std/assert";
+// @deno-types="@types/validator"
 import validator from "validator";
 import { createCustomFieldValidator } from "../src/functions/index.ts";
 import { createValidatePlugin } from "../src/alpinejs_form_validate_plugin.ts";
@@ -35,6 +37,7 @@ globalThis.CustomEvent = CustomEvent;
 globalThis.HTMLInputElement = HTMLInputElement;
 globalThis.HTMLSelectElement = HTMLSelectElement;
 
+// @deno-types="@types/alpinejs"
 const { Alpine } = await import("alpinejs");
 
 const alpineInitializeWaiter = () => {

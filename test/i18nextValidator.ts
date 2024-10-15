@@ -1,3 +1,4 @@
+// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 import { assert, assertFalse, assertStrictEquals } from "jsr:@std/assert";
 import { fireEvent } from "@testing-library/dom";
@@ -34,6 +35,7 @@ globalThis.document = document;
 globalThis.MutationObserver = MutationObserver;
 globalThis.CustomEvent = CustomEvent;
 
+// @deno-types="@types/alpinejs"
 const { Alpine } = await import("alpinejs");
 
 const alpineInitializeWaiter = () => {

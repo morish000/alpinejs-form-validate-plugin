@@ -1,4 +1,4 @@
 {
-    "required": "This value is required. {{ name }}",
-    "moreThanChars": "Please enter at least {{ count }} characters."
+  "required": "This value is required. {{ name }}",
+  "moreThanChars": "Please enter at least {{ count }} characters."
 }

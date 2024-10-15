@@ -13,8 +13,10 @@ import {
   createValidatePlugin,
   createValidatePluginDefault,
 } from "./alpinejs_form_validate_plugin.ts";
+// @deno-types="@types/alpinejs"
 import type { Alpine, DirectiveData, DirectiveUtilities } from "alpinejs";
 import type { MessageStore } from "./types/functions_types.ts";
+// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 
 const createAlpineMock = () => ({

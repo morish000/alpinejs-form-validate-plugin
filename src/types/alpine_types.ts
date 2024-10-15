@@ -1,10 +1,12 @@
 /**
  * @module AlpineExtensions
- * 
+ *
  * This module extends the Alpine interface to include additional functionality.
  */
 
+// @deno-types="@types/alpinejs"
 import type { Alpine } from "alpinejs";
+// @deno-types="@types/alpinejs"
 export type { Alpine } from "alpinejs";
 
 /**
@@ -17,11 +19,11 @@ export type { Alpine } from "alpinejs";
  *                  Receives the new value and the old value as arguments.
  */
 export interface AlpineWithWatch extends Alpine {
-    /**
-     * Observes changes in a value and triggers a callback.
-     */
-    watch: <T>(
-        getter: () => T,
-        callback: (value: T, oldValue: T) => void,
-    ) => void;
+  /**
+   * Observes changes in a value and triggers a callback.
+   */
+  watch: <T>(
+    getter: () => T,
+    callback: (value: T, oldValue: T) => void,
+  ) => void;
 }

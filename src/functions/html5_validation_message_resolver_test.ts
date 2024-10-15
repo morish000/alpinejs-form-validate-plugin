@@ -2,6 +2,7 @@ import { assertEquals, assertStrictEquals } from "jsr:@std/assert";
 import {
   createHtml5ValidationMessageResolver,
 } from "./html5_validation_message_resolver.ts";
+// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 
 const {

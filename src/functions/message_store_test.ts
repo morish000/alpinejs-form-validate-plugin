@@ -6,6 +6,7 @@ import type {
   FormFieldElements,
   MessageResolver,
 } from "../types/functions_types.ts";
+// @deno-types="@types/alpinejs"
 import type { Alpine } from "alpinejs";
 
 const mockAlpine = {

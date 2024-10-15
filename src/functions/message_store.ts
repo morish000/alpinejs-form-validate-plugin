@@ -3,6 +3,7 @@
  * This module provides a factory to create a message store for managing message values associated with DOM elements in Alpine.js applications.
  */
 
+// @deno-types="@types/alpinejs"
 import type { Alpine } from "alpinejs";
 import type {
   CreateMessageStore,

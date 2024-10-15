@@ -14,6 +14,7 @@ import type {
   Functions,
 } from "../types/functions_types.ts";
 import type { FunctionParameter } from "../types/config_types.ts";
+// @deno-types="@types/alpinejs"
 import type { Alpine } from "alpinejs";
 
 const mockAlpine = {

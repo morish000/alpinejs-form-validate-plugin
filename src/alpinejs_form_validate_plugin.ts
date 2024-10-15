@@ -3,6 +3,7 @@
  * This module provides a validation plugin for Alpine.js, enabling form and field validations.
  */
 
+// @deno-types="@types/alpinejs"
 import type {
   DirectiveData,
   DirectiveUtilities,

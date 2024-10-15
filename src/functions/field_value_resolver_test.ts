@@ -6,6 +6,7 @@ import {
   assertThrows,
 } from "jsr:@std/assert";
 import { createFieldValueResolver } from "./field_value_resolver.ts";
+// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 import { fireEvent } from "@testing-library/dom";
 

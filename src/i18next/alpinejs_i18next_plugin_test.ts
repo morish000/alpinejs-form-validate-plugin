@@ -5,6 +5,7 @@ import {
   assertStrictEquals,
 } from "jsr:@std/assert";
 import { assertSpyCall, assertSpyCalls, spy } from "jsr:@std/testing/mock";
+// @deno-types="@types/alpinejs"
 import type {
   Alpine,
   DirectiveData,
@@ -150,7 +151,7 @@ Deno.test("Alpine directive i18next-text updates element text", () => {
   const effect = (callback: () => void) => callback();
 
   // deno-lint-ignore ban-types
-  (directiveSpy.calls[0].args[1]  as Function)(
+  (directiveSpy.calls[0].args[1] as Function)(
     el,
     { expression: "" } as DirectiveData,
     { evaluateLater, effect } as DirectiveUtilities,

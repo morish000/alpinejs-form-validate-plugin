@@ -4,6 +4,7 @@
  */
 
 import type { i18n, TOptions } from "i18next";
+// @deno-types="@types/alpinejs"
 import type {
   Alpine,
   DirectiveData,
