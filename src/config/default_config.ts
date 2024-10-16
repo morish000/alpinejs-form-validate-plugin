@@ -35,7 +35,6 @@ export const fieldDefaultConfig = (): FieldValidationConfig => (
   {
     v: {},
     m: {},
-    report: false,
     onChange: true,
     onBlur: false,
     onInput: false,

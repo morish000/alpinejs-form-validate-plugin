@@ -26,14 +26,10 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
     customFieldValidators,
   }: Functions,
 ) => {
-  return function (requestReport = true) {
+  return function () {
     messageStore.clear(el);
 
-    const isReport =
-      (el as { _x_validation?: { formSubmit: boolean } })._x_validation
-        ?.formSubmit && config.report && requestReport;
-
-    if (!(isReport ? el.reportValidity() : el.checkValidity())) {
+    if (!el.checkValidity()) {
       messageStore.set(
         el,
         html5ValidationMessageResolver(el, config.m) ?? [],
@@ -41,7 +37,7 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
       el.dispatchEvent(
         new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
       );
-      return false;
+      return;
     }
 
     const value = fieldValueResolver.resolve(el);
@@ -51,18 +47,17 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
       el.dispatchEvent(
         new CustomEvent(`${Alpine.prefixed("validate")}:success`),
       );
-      return true;
+      return;
     }
 
     for (const [key, { v, m }] of Object.entries(config.v)) {
       if (typeof v === "function") {
         if (!v(el, value)) {
           messageStore.set(el, m);
-          isReport && el.reportValidity();
           el.dispatchEvent(
             new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
           );
-          return false;
+          return;
         }
         continue;
       }
@@ -73,17 +68,16 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
           !customValidator.validate(el, value, key, v)
         ) {
           messageStore.set(el, m);
-          isReport && el.reportValidity();
           el.dispatchEvent(
             new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
           );
-          return false;
+          return;
         }
       }
     }
     el.dispatchEvent(
       new CustomEvent(`${Alpine.prefixed("validate")}:success`),
     );
-    return true;
+    return;
   };
 };

@@ -12,7 +12,6 @@ import type { CreateFormValidator } from "../types/validators_types.ts";
  *
  * @param {HTMLFormElement} form - The form element containing elements to validate.
  * @param {FormValidationConfig} config - Configuration options for form validation, including whether to report validity.
- * @param {boolean} config.report - If true, the form's validity is reported to the user using reportValidity().
  * @returns {() => boolean} - A function that performs validation and returns whether the form is valid.
  */
 export const createFormValidator: CreateFormValidator = (
@@ -20,15 +19,10 @@ export const createFormValidator: CreateFormValidator = (
   { report }: FormValidationConfig,
 ) => {
   return function () {
-    let isInvalid = false;
     Array.from(form.elements).forEach((el) => {
-      if (
-        !((el as { _x_validation?: { validate: (reqReport: boolean) => void } })
-          ._x_validation
-          ?.validate(!isInvalid) && true) && !isInvalid
-      ) {
-        isInvalid = true;
-      }
+      (el as { _x_validation?: { validate: () => void } })
+        ._x_validation
+        ?.validate();
     });
 
     if (report) {

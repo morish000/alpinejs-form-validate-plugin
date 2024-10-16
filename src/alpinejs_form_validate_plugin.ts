@@ -196,11 +196,6 @@ export const createValidatePluginInternal = (
         const inputConfig = merge(
           fieldDefaultConfig(),
           defaultFieldOptions,
-          (el as FormFieldElements).form?._x_validation?.report != null
-            ? {
-              report: (el as FormFieldElements).form?._x_validation.report,
-            }
-            : {},
           expression ? evaluate(expression) : {},
         );
         inputConfig.v = formatValidationConfig(inputConfig.v);
@@ -286,8 +281,8 @@ export const createValidatePluginInternal = (
       (el as FormFieldElements)._x_validation = {
         ...config,
         formSubmit: !(el as FormFieldElements).form,
-        validate: function (requestReport: boolean) {
-          const valid = validate(requestReport);
+        validate: function () {
+          validate();
           this.formSubmit = true;
           if (["radio", "checkbox"].includes((el as FormFieldElements).type)) {
             Array.from<FormFieldElements>(
@@ -306,7 +301,6 @@ export const createValidatePluginInternal = (
                 });
               });
           }
-          return valid;
         },
       };
 
@@ -314,9 +308,6 @@ export const createValidatePluginInternal = (
         el as FormFieldElements,
         (message) => {
           (el as FormFieldElements).setCustomValidity(message);
-          (el as FormFieldElements)._x_validation?.formSubmit && message &&
-            config.report &&
-            (el as FormFieldElements).reportValidity();
         },
       );
 

@@ -51,7 +51,6 @@ export type FormValidationOption = DeepOptional<FormValidationConfig>;
  * @typedef {Object} FieldValidationConfig
  * @property {ValidationConfig} v - Validation rules configuration.
  * @property {MessageConfig} m - Message configuration for validation.
- * @property {boolean} report - Whether to report validation results.
  * @property {EventHandlerOptions} onChange - Options for the change event handler.
  * @property {EventHandlerOptions} onBlur - Options for the blur event handler.
  * @property {EventHandlerOptions} onInput - Options for the input event handler.
@@ -63,14 +62,13 @@ export type FormValidationOption = DeepOptional<FormValidationConfig>;
 export type FieldValidationConfig = {
   v: ValidationConfig;
   m: MessageConfig;
-  report: boolean;
   onChange: EventHandlerOptions;
   onBlur: EventHandlerOptions;
   onInput: EventHandlerOptions;
   inputLimit: InputLimit;
   inputLimitOpts: InputLimitOpts;
   formSubmit?: boolean;
-  validate?: (requestReport: boolean) => boolean;
+  validate?: () => void;
 };
 
 /**
@@ -79,7 +77,6 @@ export type FieldValidationConfig = {
  * @typedef {Object} FieldValidationOption
  * @property {ValidationOption} [v] - Optional validation options.
  * @property {MessageOption} [m] - Optional message options.
- * @property {boolean} [report] - Optional reporting flag.
  * @property {EventHandlerOptions} [onChange] - Optional change event handler options.
  * @property {EventHandlerOptions} [onBlur] - Optional blur event handler options.
  * @property {EventHandlerOptions} [onInput] - Optional input event handler options.
@@ -89,7 +86,6 @@ export type FieldValidationConfig = {
 export type FieldValidationOption = {
   v?: ValidationOption;
   m?: MessageOption;
-  report?: boolean;
   onChange?: EventHandlerOptions;
   onBlur?: EventHandlerOptions;
   onInput?: EventHandlerOptions;
