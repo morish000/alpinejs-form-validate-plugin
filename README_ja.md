@@ -460,15 +460,16 @@ Alpine.plugin(createValidatePlugin({
     trigger: {
       target: ...,
     }
-  }
+  },
   defaultFieldOptions: {
     v: ...,
     inputLimitOpts: {
       throttle: {
         wait: ...,
+      }
     }
   }
-});
+}));
 ```
 
 上書きしたい項目のみを指定できますが、ツリー構造には従う必要があります。  

@@ -461,15 +461,16 @@ Alpine.plugin(createValidatePlugin({
     trigger: {
       target: ...,
     }
-  }
+  },
   defaultFieldOptions: {
     v: ...,
     inputLimitOpts: {
       throttle: {
         wait: ...,
+      }
     }
   }
-});
+}));
 ```
 
 Specify only the items you want to overwrite, but you must follow the tree structure.  
