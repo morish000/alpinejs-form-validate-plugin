@@ -26,12 +26,12 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
     customFieldValidators,
   }: Functions,
 ) => {
-  return function () {
+  return function (requestReport = true) {
     messageStore.clear(el);
 
     const isReport =
       (el as { _x_validation?: { formSubmit: boolean } })._x_validation
-        ?.formSubmit && config.report;
+        ?.formSubmit && config.report && requestReport;
 
     if (!(isReport ? el.reportValidity() : el.checkValidity())) {
       messageStore.set(
@@ -41,7 +41,7 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
       el.dispatchEvent(
         new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
       );
-      return;
+      return false;
     }
 
     const value = fieldValueResolver.resolve(el);
@@ -51,7 +51,7 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
       el.dispatchEvent(
         new CustomEvent(`${Alpine.prefixed("validate")}:success`),
       );
-      return;
+      return true;
     }
 
     for (const [key, { v, m }] of Object.entries(config.v)) {
@@ -62,7 +62,7 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
           el.dispatchEvent(
             new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
           );
-          return;
+          return false;
         }
         continue;
       }
@@ -77,12 +77,13 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
           el.dispatchEvent(
             new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
           );
-          return;
+          return false;
         }
       }
     }
     el.dispatchEvent(
       new CustomEvent(`${Alpine.prefixed("validate")}:success`),
     );
+    return true;
   };
 };

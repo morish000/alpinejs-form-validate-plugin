@@ -70,7 +70,7 @@ export type FieldValidationConfig = {
   inputLimit: InputLimit;
   inputLimitOpts: InputLimitOpts;
   formSubmit?: boolean;
-  validate?: () => void;
+  validate?: (requestReport: boolean) => boolean;
 };
 
 /**

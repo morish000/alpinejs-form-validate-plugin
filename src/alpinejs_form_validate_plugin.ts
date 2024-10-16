@@ -286,8 +286,8 @@ export const createValidatePluginInternal = (
       (el as FormFieldElements)._x_validation = {
         ...config,
         formSubmit: !(el as FormFieldElements).form,
-        validate: function () {
-          validate();
+        validate: function (requestReport: boolean) {
+          const valid = validate(requestReport);
           this.formSubmit = true;
           if (["radio", "checkbox"].includes((el as FormFieldElements).type)) {
             Array.from<FormFieldElements>(
@@ -306,6 +306,7 @@ export const createValidatePluginInternal = (
                 });
               });
           }
+          return valid;
         },
       };
 

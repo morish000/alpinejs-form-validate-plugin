@@ -20,9 +20,15 @@ export const createFormValidator: CreateFormValidator = (
   { report }: FormValidationConfig,
 ) => {
   return function () {
+    let isInvalid = false;
     Array.from(form.elements).forEach((el) => {
-      (el as { _x_validation?: { validate: () => void } })._x_validation
-        ?.validate();
+      if (
+        !((el as { _x_validation?: { validate: (reqReport: boolean) => void } })
+          ._x_validation
+          ?.validate(!isInvalid) && true) && !isInvalid
+      ) {
+        isInvalid = true;
+      }
     });
 
     if (report) {

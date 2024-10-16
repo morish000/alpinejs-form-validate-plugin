@@ -44,4 +44,4 @@ export type CreateFieldValidator = (Alpine: Alpine) => (
   el: FormFieldElements,
   config: FieldValidationConfig,
   functions: Functions,
-) => () => void;
+) => (requestReport?: boolean) => boolean;
