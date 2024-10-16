@@ -227,6 +227,7 @@ export const createValidatePluginInternal = (
         return (e?: Event) => {
           before?.call(el, e);
           validate.apply(el);
+          (el as FormFieldElements).reportValidity();
           after?.call(el, e);
         };
       };
