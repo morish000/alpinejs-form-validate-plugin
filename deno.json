@@ -19,6 +19,7 @@
   },
   "exports": {
     ".": "./src/mod.ts",
+    "./plugin": "./src/alpinejs_form_validate_plugin.ts",
     "./config": "./src/config/index.ts",
     "./functions": "./src/functions/index.ts",
     "./i18next/alpinejs_i18next_plugin": "./src/i18next/alpinejs_i18next_plugin.ts",

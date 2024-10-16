@@ -58,6 +58,7 @@ You can obtain it from `esm.sh` as follows:
   {
     "imports": {
       "@morish000/alpinejs_form_validate_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin",
+      "@morish000/alpinejs_form_validate_plugin/plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/plugin",
       "@morish000/alpinejs_form_validate_plugin/functions": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/functions",
       "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/alpinejs_i18next_plugin",
       "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/i18next_message_resolver"
@@ -73,6 +74,7 @@ You can obtain it from `jsDelivr` as follows:
   {
     "imports": {
       "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+      "@morish000/alpinejs_form_validate_plugin/plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/alpinejs_form_validate_plugin.mjs",
       "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/functions/index.mjs",
       "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs",
       "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/i18next_message_resolver.mjs"
@@ -93,7 +95,7 @@ You can obtain it from `jsDelivr` as follows:
       {
         "imports": {
           "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs"
+          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/alpinejs_form_validate_plugin.mjs"
         }
       }
     </script>
@@ -751,7 +753,7 @@ messages.
       {
         "imports": {
           "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs"
+          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/alpinejs_form_validate_plugin.mjs"
         }
       }
     </script>
@@ -878,7 +880,7 @@ initialization.
         "imports": {
           "alpinejs": "https://esm.sh/alpinejs@3.14.x",
           "validator": "https://esm.sh/validator@13.12.x",
-          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/alpinejs_form_validate_plugin.mjs",
           "@morish000/alpinejs_form_validate_plugin/functions": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/functions/index.mjs"
         }
       }
@@ -967,13 +969,15 @@ An example using `i18next` for message resources.
 - `/locales/validate/en.json`:
   ```json
   {
-    "greeting": "Hello, {{name}}!"
+    "moreThanChars": "Please enter at least {{ count }} characters.",
+    "required": "This value is required. {{ name }}"
   }
   ```
 - `/locales/validate/ja.json`:
   ```json
   {
-    "greeting": "こんにちは, {{name}}!"
+    "moreThanChars": "{{ count }} 文字以上で入力してください。",
+    "required": "この値は必須です。{{ name }}"
   }
   ```
 
@@ -988,7 +992,7 @@ An example using `i18next` for message resources.
           "alpinejs": "https://esm.sh/alpinejs@3.14.x",
           "i18next": "https://esm.sh/i18next@23.x",
           "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
-          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/mod.mjs",
+          "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/alpinejs_form_validate_plugin.mjs",
           "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs",
           "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/i18next_message_resolver.mjs"
         }
