@@ -29,11 +29,7 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
   return function () {
     messageStore.clear(el);
 
-    const isReport =
-      (el as { _x_validation?: { formSubmit: boolean } })._x_validation
-        ?.formSubmit && config.report;
-
-    if (!(isReport ? el.reportValidity() : el.checkValidity())) {
+    if (!el.checkValidity()) {
       messageStore.set(
         el,
         html5ValidationMessageResolver(el, config.m) ?? [],
@@ -58,7 +54,6 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
       if (typeof v === "function") {
         if (!v(el, value)) {
           messageStore.set(el, m);
-          isReport && el.reportValidity();
           el.dispatchEvent(
             new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
           );
@@ -73,7 +68,6 @@ export const createFieldValidator: CreateFieldValidator = (Alpine: Alpine) =>
           !customValidator.validate(el, value, key, v)
         ) {
           messageStore.set(el, m);
-          isReport && el.reportValidity();
           el.dispatchEvent(
             new CustomEvent(`${Alpine.prefixed("validate")}:failed`),
           );
