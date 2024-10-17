@@ -52,19 +52,17 @@ Deno.test("createFieldValidator - handles HTML5 validity failure", () => {
   } as unknown as FieldValidationConfig;
 
   const checkValidity = spy(() => false);
-  const reportValidity = spy(() => false);
   const dispatchEventSpy = spy((..._args: any[]) => {});
   const el = {
     id: "input1",
     required: false,
     value: "",
     checkValidity,
-    reportValidity,
     dispatchEvent: dispatchEventSpy,
   } as unknown as FormFieldElements;
 
   mockFunctions.messageStore?.create(el, () => {});
-  let validate = createFieldValidator(mockAlpine)(
+  const validate = createFieldValidator(mockAlpine)(
     el,
     validatorConfig,
     mockFunctions,
@@ -79,9 +77,6 @@ Deno.test("createFieldValidator - handles HTML5 validity failure", () => {
     "x-validate:failed",
   );
   assertSpyCalls(checkValidity, 1);
-  assertSpyCalls(reportValidity, 0);
-
-  (el as any)["_x_validation"] = { formSubmit: true };
 
   messageResolved = null;
 
@@ -93,25 +88,6 @@ Deno.test("createFieldValidator - handles HTML5 validity failure", () => {
     "x-validate:failed",
   );
   assertSpyCalls(checkValidity, 2);
-  assertSpyCalls(reportValidity, 0);
-
-  validatorConfig.report = true;
-
-  validate = createFieldValidator(mockAlpine)(
-    el,
-    validatorConfig,
-    mockFunctions,
-  );
-
-  validate();
-
-  assertSpyCalls(dispatchEventSpy, 3);
-  assertStrictEquals(
-    dispatchEventSpy.calls[2].args[0].type,
-    "x-validate:failed",
-  );
-  assertSpyCalls(checkValidity, 2);
-  assertSpyCalls(reportValidity, 1);
 });
 
 Deno.test("createFieldValidator - succeeds with not required and empty field", () => {
@@ -134,7 +110,6 @@ Deno.test("createFieldValidator - succeeds with not required and empty field", (
     required: false,
     value: "",
     checkValidity: () => true,
-    reportValidity: () => true,
     dispatchEvent: dispatchEventSpy,
   } as unknown as FormFieldElements;
 
@@ -176,19 +151,18 @@ Deno.test("createFieldValidator - direct custom validation method success and fa
     },
   } as unknown as FieldValidationConfig;
 
-  const reportValidity = spy(() => true);
+  const checkValidity = spy(() => true);
   const dispatchEventSpy = spy((..._args: any[]) => {});
   const el = {
     id: "input1",
     required: true,
     value: "mockValue",
-    checkValidity: () => true,
-    reportValidity,
+    checkValidity,
     dispatchEvent: dispatchEventSpy,
   } as unknown as FormFieldElements;
 
   mockFunctions.messageStore?.create(el, () => {});
-  let validate = createFieldValidator(mockAlpine)(
+  const validate = createFieldValidator(mockAlpine)(
     el,
     validatorConfig,
     mockFunctions,
@@ -201,7 +175,7 @@ Deno.test("createFieldValidator - direct custom validation method success and fa
     dispatchEventSpy.calls[0].args[0].type,
     "x-validate:success",
   );
-  assertSpyCalls(reportValidity, 0);
+  assertSpyCalls(checkValidity, 1);
 
   el.value = "wrongValue";
   validate();
@@ -211,25 +185,7 @@ Deno.test("createFieldValidator - direct custom validation method success and fa
     dispatchEventSpy.calls[1].args[0].type,
     "x-validate:failed",
   );
-  assertSpyCalls(reportValidity, 0);
-
-  (el as any)["_x_validation"] = { formSubmit: true };
-  validatorConfig.report = true;
-
-  validate = createFieldValidator(mockAlpine)(
-    el,
-    validatorConfig,
-    mockFunctions,
-  );
-
-  validate();
-
-  assertSpyCalls(dispatchEventSpy, 3);
-  assertStrictEquals(
-    dispatchEventSpy.calls[2].args[0].type,
-    "x-validate:failed",
-  );
-  assertSpyCalls(reportValidity, 2);
+  assertSpyCalls(checkValidity, 2);
 });
 
 Deno.test("createFieldValidator - custom stored validation method success and failure", () => {
@@ -257,19 +213,18 @@ Deno.test("createFieldValidator - custom stored validation method success and fa
     },
   } as unknown as FieldValidationConfig;
 
-  const reportValidity = spy(() => true);
+  const checkValidity = spy(() => true);
   const dispatchEventSpy = spy((..._args: any[]) => {});
   const el = {
     id: "input1",
     required: true,
     value: "mockValue",
-    checkValidity: () => true,
-    reportValidity,
+    checkValidity,
     dispatchEvent: dispatchEventSpy,
   } as unknown as FormFieldElements;
 
   mockFunctions.messageStore?.create(el, () => {});
-  let validate = createFieldValidator(mockAlpine)(
+  const validate = createFieldValidator(mockAlpine)(
     el,
     validatorConfig,
     mockFunctions,
@@ -282,7 +237,7 @@ Deno.test("createFieldValidator - custom stored validation method success and fa
     dispatchEventSpy.calls[0].args[0].type,
     "x-validate:success",
   );
-  assertSpyCalls(reportValidity, 0);
+  assertSpyCalls(checkValidity, 1);
 
   el.value = "wrongValue";
   validate();
@@ -292,23 +247,5 @@ Deno.test("createFieldValidator - custom stored validation method success and fa
     dispatchEventSpy.calls[1].args[0].type,
     "x-validate:failed",
   );
-  assertSpyCalls(reportValidity, 0);
-
-  (el as any)["_x_validation"] = { formSubmit: true };
-  validatorConfig.report = true;
-
-  validate = createFieldValidator(mockAlpine)(
-    el,
-    validatorConfig,
-    mockFunctions,
-  );
-
-  validate();
-
-  assertSpyCalls(dispatchEventSpy, 3);
-  assertStrictEquals(
-    dispatchEventSpy.calls[2].args[0].type,
-    "x-validate:failed",
-  );
-  assertSpyCalls(reportValidity, 2);
+  assertSpyCalls(checkValidity, 2);
 });

@@ -232,6 +232,8 @@ export const createValidatePluginInternal = (
         return (e?: Event) => {
           before?.call(el, e);
           validate.apply(el);
+          (el as FormFieldElements)._x_validation?.formSubmit &&
+            config.report && (el as FormFieldElements).reportValidity();
           after?.call(el, e);
         };
       };
@@ -313,9 +315,6 @@ export const createValidatePluginInternal = (
         el as FormFieldElements,
         (message) => {
           (el as FormFieldElements).setCustomValidity(message);
-          (el as FormFieldElements)._x_validation?.formSubmit && message &&
-            config.report &&
-            (el as FormFieldElements).reportValidity();
         },
       );
 

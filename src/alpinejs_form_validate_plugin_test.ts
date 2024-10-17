@@ -676,7 +676,7 @@ Deno.test("validate directive - calls reportValidity on failure with report opti
     removeEventListener: spy((_t: string, _h: () => void) => {}),
     setCustomValidity: () => {},
     dispatchEvent: spy((_e: Event) => {}),
-    checkValidity: () => false,
+    checkValidity: spy(() => false),
     reportValidity: spy(() => false),
     validity: {
       valueMissing: "",
@@ -709,11 +709,13 @@ Deno.test("validate directive - calls reportValidity on failure with report opti
   assertStrictEquals(mockElement.addEventListener.calls[0].args[0], "change");
 
   assertSpyCalls(mockElement.reportValidity, 0);
+  assertSpyCalls(mockElement.checkValidity, 0);
 
   (mockElement._x_validation as any).formSubmit = true;
   mockElement.addEventListener.calls[0].args[1]();
 
-  assertSpyCalls(mockElement.reportValidity, 2);
+  assertSpyCalls(mockElement.reportValidity, 1);
+  assertSpyCalls(mockElement.checkValidity, 2);
 
   mockCleanUp.calls[0].args[0]();
 
