@@ -1,6 +1,6 @@
 {
   "name": "@morish000/alpinejs-form-validate-plugin",
-  "version": "0.1.4-6",
+  "version": "0.1.5",
   "tasks": {
     "lint": "deno lint && deno fmt",
     "test": "rm -rf ./build/cov_profile && deno test --allow-all --coverage=./build/cov_profile src && deno coverage ./build/cov_profile --html",

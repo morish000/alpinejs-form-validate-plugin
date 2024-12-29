@@ -620,8 +620,8 @@ Assuming message resource files are placed on the server at the following paths:
       {
         "imports": {
           "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-          "i18next": "https://esm.sh/i18next@23.x",
-          "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
+          "i18next": "https://esm.sh/i18next@24.2.x",
+          "i18next-http-backend": "https://esm.sh/i18next-http-backend@3.0.x",
           "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs"
         }
       }
@@ -990,8 +990,8 @@ An example using `i18next` for message resources.
       {
         "imports": {
           "alpinejs": "https://esm.sh/alpinejs@3.14.x",
-          "i18next": "https://esm.sh/i18next@23.x",
-          "i18next-http-backend": "https://esm.sh/i18next-http-backend@2.x",
+          "i18next": "https://esm.sh/i18next@24.2.x",
+          "i18next-http-backend": "https://esm.sh/i18next-http-backend@3.0.x",
           "@morish000/alpinejs_form_validate_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/alpinejs_form_validate_plugin.mjs",
           "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/alpinejs_i18next_plugin.mjs",
           "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://cdn.jsdelivr.net/gh/morish000/alpinejs-form-validate-plugin/dist/i18next/i18next_message_resolver.mjs"
@@ -1016,7 +1016,9 @@ An example using `i18next` for message resources.
           Alpine.plugin(createI18NextPlugin(i18nStore));
           Alpine.plugin(createValidatePlugin({
             defaultFunctionsOptions: {
-              messageResolver: createI18NextMessageResolver(i18nStore)(Alpine),
+              messageResolver: createI18NextMessageResolver(i18nStore)(
+                Alpine,
+              ),
             },
           }));
           Alpine.start();
