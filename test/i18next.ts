@@ -1,10 +1,8 @@
-// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
-import { assertStrictEquals } from "jsr:@std/assert";
 import { fireEvent } from "@testing-library/dom";
 import i18next, { type InitOptions } from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
-import { createI18NextPlugin } from "../src/i18next/alpinejs_i18next_plugin.ts";
+import { createI18NextPlugin } from "../src/i18next/alpinejs_i18next_plugin";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 
@@ -33,8 +31,9 @@ globalThis.document = document;
 globalThis.MutationObserver = MutationObserver;
 globalThis.CustomEvent = CustomEvent;
 
-// @deno-types="@types/alpinejs"
-const { Alpine } = await import("alpinejs");
+// const { default: Alpine } = await import("alpinejs");
+// This workaround is necessary to ensure compatibility when running with Jest
+const Alpine = ((await import("alpinejs")) as unknown as any).Alpine;
 
 const alpineInitializeWaiter = () => {
   let alpineInitialized = false;
@@ -86,7 +85,7 @@ i18next
 
 await waitAlpineInitialized();
 
-Deno.test("i18next", async () => {
+test("i18next", async () => {
   document.body.innerHTML = `
     <p id="p-1" x-text="$t('greeting', { name: 'morish000'})"></p>
     <p id="p-2" x-i18next-text="['greeting', { name: 'morish000'}]"></p>
@@ -99,18 +98,18 @@ Deno.test("i18next", async () => {
   const p2 = document.getElementById("p-2") as HTMLElement;
   const en = document.getElementById("en") as HTMLInputElement;
   const ja = document.getElementById("ja") as HTMLInputElement;
-  assertStrictEquals(p1.textContent, "Hello, morish000!");
-  assertStrictEquals(p2.textContent, "Hello, morish000!");
+  expect(p1.textContent).toBe("Hello, morish000!");
+  expect(p2.textContent).toBe("Hello, morish000!");
 
   fireEvent.click(ja);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(p1.textContent, "こんにちは, morish000!");
-  assertStrictEquals(p2.textContent, "こんにちは, morish000!");
+  expect(p1.textContent).toBe("こんにちは, morish000!");
+  expect(p2.textContent).toBe("こんにちは, morish000!");
 
   fireEvent.click(en);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(p1.textContent, "Hello, morish000!");
-  assertStrictEquals(p2.textContent, "Hello, morish000!");
+  expect(p1.textContent).toBe("Hello, morish000!");
+  expect(p2.textContent).toBe("Hello, morish000!");
 
   document.body.innerHTML = "";
 });

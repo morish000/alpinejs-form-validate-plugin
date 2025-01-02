@@ -1,11 +1,3 @@
-// deno-lint-ignore-file no-explicit-any
-import {
-  assert,
-  assertNotStrictEquals,
-  assertStrictEquals,
-} from "jsr:@std/assert";
-import { assertSpyCall, assertSpyCalls, spy } from "jsr:@std/testing/mock";
-// @deno-types="@types/alpinejs"
 import type {
   Alpine,
   DirectiveData,
@@ -13,11 +5,12 @@ import type {
   ElementWithXAttributes,
 } from "alpinejs";
 import type { i18n } from "i18next";
-import { createI18NextPlugin } from "./alpinejs_i18next_plugin.ts";
+import { spy } from "sinon";
+import { createI18NextPlugin } from "./alpinejs_i18next_plugin";
 
-const i18nOnSpy = () => spy((_e: any, _h: () => void) => {});
+const i18nOnSpy = () => spy((_e: any, _h: () => void) => { });
 const i18nTSpy = () => spy((..._p) => "translated text");
-const i18nStoreOnSpy = () => spy((_e: any, _h: () => void) => {});
+const i18nStoreOnSpy = () => spy((_e: any, _h: () => void) => { });
 
 const i18nMock = (
   i18nOn: any,
@@ -40,13 +33,13 @@ const i18nMock = (
 
 const alpineMock = () => {
   return {
-    magic: (..._p: any[]) => {},
-    directive: (..._p: any[]) => {},
+    magic: (..._p: any[]) => { },
+    directive: (..._p: any[]) => { },
     mutateDom: (f: () => void) => f(),
   } as unknown as Alpine;
 };
 
-Deno.test("createI18NextPlugin initializes correctly", () => {
+test("createI18NextPlugin initializes correctly", () => {
   const i18nOn = i18nOnSpy();
   const i18nT = i18nTSpy();
   const i18nStoreOn = i18nStoreOnSpy();
@@ -60,33 +53,33 @@ Deno.test("createI18NextPlugin initializes correctly", () => {
     i18next: () => i18next,
   })(Alpine);
 
-  assertSpyCalls(i18nOn, 2);
-  assertStrictEquals(i18nOn.calls[0].args[0], "languageChanged");
-  assert(typeof i18nOn.calls[0].args[1] === "function");
-  assertStrictEquals(i18nOn.calls[1].args[0], "loaded");
-  assert(typeof i18nOn.calls[1].args[1] === "function");
+  expect(i18nOn.callCount).toBe(2);
+  expect(i18nOn.getCall(0).args[0]).toBe("languageChanged");
+  expect(typeof i18nOn.getCall(0).args[1] === "function");
+  expect(i18nOn.getCall(1).args[0]).toBe("loaded");
+  expect(typeof i18nOn.getCall(1).args[1] === "function");
 
-  assertSpyCalls(i18nStoreOn, 2);
-  assertStrictEquals(i18nStoreOn.calls[0].args[0], "added");
-  assert(typeof i18nStoreOn.calls[0].args[1] === "function");
-  assertStrictEquals(i18nStoreOn.calls[1].args[0], "removed");
-  assert(typeof i18nStoreOn.calls[1].args[1] === "function");
+  expect(i18nStoreOn.callCount).toBe(2);
+  expect(i18nStoreOn.getCall(0).args[0]).toBe("added");
+  expect(typeof i18nStoreOn.getCall(0).args[1] === "function");
+  expect(i18nStoreOn.getCall(1).args[0]).toBe("removed");
+  expect(typeof i18nStoreOn.getCall(1).args[1] === "function");
 
-  assertSpyCalls(magicSpy, 2);
-  assertStrictEquals(magicSpy.calls[0].args[0], "t");
-  assert(typeof magicSpy.calls[0].args[1] === "function");
-  assertStrictEquals(magicSpy.calls[1].args[0], "i18next");
-  assert(typeof magicSpy.calls[1].args[1] === "function");
+  expect(magicSpy.callCount).toBe(2);
+  expect(magicSpy.getCall(0).args[0]).toBe("t");
+  expect(typeof magicSpy.getCall(0).args[1] === "function");
+  expect(magicSpy.getCall(1).args[0]).toBe("i18next");
+  expect(typeof magicSpy.getCall(1).args[1] === "function");
 
-  assertSpyCalls(directiveSpy, 1);
-  assertStrictEquals(directiveSpy.calls[0].args[0], "i18next-text");
-  assert(typeof directiveSpy.calls[0].args[1] === "function");
+  expect(directiveSpy.callCount).toBe(1);
+  expect(directiveSpy.getCall(0).args[0]).toBe("i18next-text");
+  expect(typeof directiveSpy.getCall(0).args[1] === "function");
 
   magicSpy.restore();
   directiveSpy.restore();
 });
 
-Deno.test("Alpine magic t method translation", () => {
+test("Alpine magic t method translation", () => {
   const i18nOn = i18nOnSpy();
   const i18nT = i18nTSpy();
   const i18nStoreOn = i18nStoreOnSpy();
@@ -99,19 +92,17 @@ Deno.test("Alpine magic t method translation", () => {
     i18next: () => i18next,
   })(Alpine);
 
-  const translated = (magicSpy.calls[0].args[1] as any)()("key", {});
-  assertStrictEquals(translated, "translated text");
+  const translated = (magicSpy.getCall(0).args[1] as any)()("key", {});
+  expect(translated).toBe("translated text");
 
-  assertSpyCalls(i18nT, 1);
-  assertSpyCall(i18nT, 0, {
-    args: ["key", {}],
-    returned: "translated text",
-  });
+  expect(i18nT.callCount).toBe(1);
+  expect(i18nT.getCall(0).args).toEqual(["key", {}]);
+  expect(i18nT.getCall(0).returnValue).toEqual("translated text");
 
   magicSpy.restore();
 });
 
-Deno.test("Alpine magic i18next method", () => {
+test("Alpine magic i18next method", () => {
   const i18nOn = i18nOnSpy();
   const i18nT = i18nTSpy();
   const i18nStoreOn = i18nStoreOnSpy();
@@ -124,12 +115,12 @@ Deno.test("Alpine magic i18next method", () => {
     i18next: () => i18next,
   })(Alpine);
 
-  assertStrictEquals((magicSpy.calls[1].args[1] as any)()(), i18next);
+  expect((magicSpy.getCall(1).args[1] as any)()()).toBe(i18next);
 
   magicSpy.restore();
 });
 
-Deno.test("Alpine directive i18next-text updates element text", () => {
+test("Alpine directive i18next-text updates element text", () => {
   const i18nOn = i18nOnSpy();
   const i18nT = i18nTSpy();
   const i18nStoreOn = i18nStoreOnSpy();
@@ -150,19 +141,18 @@ Deno.test("Alpine directive i18next-text updates element text", () => {
 
   const effect = (callback: () => void) => callback();
 
-  // deno-lint-ignore ban-types
-  (directiveSpy.calls[0].args[1] as Function)(
+  (directiveSpy.getCall(0).args[1] as Function)(
     el,
     { expression: "" } as DirectiveData,
     { evaluateLater, effect } as DirectiveUtilities,
   );
 
-  assertStrictEquals(el.textContent, "translated text");
+  expect(el.textContent).toBe("translated text");
 
   directiveSpy.restore();
 });
 
-Deno.test("i18n event listeners update timestamp on events", async () => {
+test("i18n event listeners update timestamp on events", async () => {
   const i18nOn = i18nOnSpy();
   const i18nT = i18nTSpy();
   const i18nStoreOn = i18nStoreOnSpy();
@@ -177,21 +167,25 @@ Deno.test("i18n event listeners update timestamp on events", async () => {
 
   await new Promise((resolve) => setTimeout(resolve, 1));
   let timestamp = container.timestamp;
-  i18nOn.calls[0].args[1]();
-  assertNotStrictEquals(container.timestamp, timestamp);
+  i18nOn.getCall(0).args[1]();
+  await new Promise((resolve) => setTimeout(resolve, 1));
+  expect(container.timestamp).not.toBe(timestamp);
 
   await new Promise((resolve) => setTimeout(resolve, 1));
   timestamp = container.timestamp;
-  i18nOn.calls[1].args[1]();
-  assertNotStrictEquals(container.timestamp, timestamp);
+  i18nOn.getCall(1).args[1]();
+  await new Promise((resolve) => setTimeout(resolve, 1));
+  expect(container.timestamp).not.toBe(timestamp);
 
   await new Promise((resolve) => setTimeout(resolve, 1));
   timestamp = container.timestamp;
-  i18nStoreOn.calls[0].args[1]();
-  assertNotStrictEquals(container.timestamp, timestamp);
+  i18nStoreOn.getCall(0).args[1]();
+  await new Promise((resolve) => setTimeout(resolve, 1));
+  expect(container.timestamp).not.toBe(timestamp);
 
   await new Promise((resolve) => setTimeout(resolve, 1));
   timestamp = container.timestamp;
-  i18nStoreOn.calls[1].args[1]();
-  assertNotStrictEquals(container.timestamp, timestamp);
+  i18nStoreOn.getCall(1).args[1]();
+  await new Promise((resolve) => setTimeout(resolve, 1));
+  expect(container.timestamp).not.toBe(timestamp);
 });

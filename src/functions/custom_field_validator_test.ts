@@ -1,11 +1,8 @@
-import { assertFalse, assertStrictEquals } from "jsr:@std/assert";
-import { assertSpyCall, assertSpyCalls, spy } from "jsr:@std/testing/mock";
-import { createCustomFieldValidator } from "./custom_field_validator.ts";
-import type { ValidateFunctions } from "../types/functions_types.ts";
-// @deno-types="@types/jsdom"
+import type { ValidateFunctions } from "../types/functions_types";
+import { spy } from "sinon";
 import { JSDOM } from "jsdom";
-// @deno-types="@types/validator"
 import validaorJS from "validator";
+import { createCustomFieldValidator } from "./custom_field_validator";
 
 const {
   window,
@@ -32,28 +29,28 @@ const mockValidator = {
   notFunction: "",
 };
 
-Deno.test("isSupported correctly identifies supported methods (mockValidator)", () => {
+test("isSupported correctly identifies supported methods (mockValidator)", () => {
   const validator = createCustomFieldValidator(
     mockValidator as unknown as ValidateFunctions,
   );
-  assertStrictEquals(validator.isSupported("isEmail"), true);
-  assertStrictEquals(validator.isSupported("isLength"), true);
-  assertStrictEquals(validator.isSupported("nonExistentFunc"), false);
-  assertStrictEquals(validator.isSupported("escape"), true);
-  assertStrictEquals(validator.isSupported("notFunction"), false);
+  expect(validator.isSupported("isEmail")).toBe(true);
+  expect(validator.isSupported("isLength")).toBe(true);
+  expect(validator.isSupported("nonExistentFunc")).toBe(false);
+  expect(validator.isSupported("escape")).toBe(true);
+  expect(validator.isSupported("notFunction")).toBe(false);
 });
 
-Deno.test("isSupported correctly identifies supported methods (validator.js)", () => {
+test("isSupported correctly identifies supported methods (validator.js)", () => {
   const validator = createCustomFieldValidator(
     validaorJS as unknown as ValidateFunctions,
   );
-  assertStrictEquals(validator.isSupported("isEmail"), true);
-  assertStrictEquals(validator.isSupported("isLength"), true);
-  assertStrictEquals(validator.isSupported("nonExistentFunc"), false);
-  assertStrictEquals(validator.isSupported("escape"), true);
+  expect(validator.isSupported("isEmail")).toBe(true);
+  expect(validator.isSupported("isLength")).toBe(true);
+  expect(validator.isSupported("nonExistentFunc")).toBe(false);
+  expect(validator.isSupported("escape")).toBe(true);
 });
 
-Deno.test("validate handles single parameter functions correctly (mockValidator)", () => {
+test("validate handles single parameter functions correctly (mockValidator)", () => {
   const validator = createCustomFieldValidator(
     mockValidator as unknown as ValidateFunctions,
   );
@@ -63,7 +60,7 @@ Deno.test("validate handles single parameter functions correctly (mockValidator)
     "isEmail",
     [],
   );
-  assertStrictEquals(result, true);
+  expect(result).toBe(true);
 
   const invalidResult = validator.validate(
     createDummyElement(),
@@ -71,10 +68,10 @@ Deno.test("validate handles single parameter functions correctly (mockValidator)
     "isEmail",
     [],
   );
-  assertStrictEquals(invalidResult, false);
+  expect(invalidResult).toBe(false);
 });
 
-Deno.test("validate handles single parameter functions correctly (validator.js)", () => {
+test("validate handles single parameter functions correctly (validator.js)", () => {
   const validator = createCustomFieldValidator(
     validaorJS as unknown as ValidateFunctions,
   );
@@ -84,7 +81,7 @@ Deno.test("validate handles single parameter functions correctly (validator.js)"
     "isEmail",
     [],
   );
-  assertStrictEquals(result, true);
+  expect(result).toBe(true);
 
   const invalidResult = validator.validate(
     createDummyElement(),
@@ -92,10 +89,10 @@ Deno.test("validate handles single parameter functions correctly (validator.js)"
     "isEmail",
     [],
   );
-  assertStrictEquals(invalidResult, false);
+  expect(invalidResult).toBe(false);
 });
 
-Deno.test("validate handles multi-parameter functions correctly (mockValidator)", () => {
+test("validate handles multi-parameter functions correctly (mockValidator)", () => {
   const validator = createCustomFieldValidator(
     mockValidator as unknown as ValidateFunctions,
   );
@@ -104,7 +101,7 @@ Deno.test("validate handles multi-parameter functions correctly (mockValidator)"
       min: 3,
     },
   ]);
-  assertStrictEquals(result, true);
+  expect(result).toBe(true);
 
   const invalidResult = validator.validate(
     createDummyElement(),
@@ -114,10 +111,10 @@ Deno.test("validate handles multi-parameter functions correctly (mockValidator)"
       min: 3,
     }],
   );
-  assertStrictEquals(invalidResult, false);
+  expect(invalidResult).toBe(false);
 });
 
-Deno.test("validate handles multi-parameter functions correctly (validator.js)", () => {
+test("validate handles multi-parameter functions correctly (validator.js)", () => {
   const validator = createCustomFieldValidator(
     validaorJS as unknown as ValidateFunctions,
   );
@@ -126,7 +123,7 @@ Deno.test("validate handles multi-parameter functions correctly (validator.js)",
       min: 3,
     },
   ]);
-  assertStrictEquals(result, true);
+  expect(result).toBe(true);
 
   const invalidResult = validator.validate(
     createDummyElement(),
@@ -136,10 +133,10 @@ Deno.test("validate handles multi-parameter functions correctly (validator.js)",
       min: 3,
     }],
   );
-  assertStrictEquals(invalidResult, false);
+  expect(invalidResult).toBe(false);
 });
 
-Deno.test("validate gracefully handles unsupported functions (mockValidator)", () => {
+test("validate gracefully handles unsupported functions (mockValidator)", () => {
   const validator = createCustomFieldValidator(
     mockValidator as unknown as ValidateFunctions,
   );
@@ -149,10 +146,10 @@ Deno.test("validate gracefully handles unsupported functions (mockValidator)", (
     "nonExistentFunc",
     [],
   );
-  assertFalse(result);
+  expect(result).toBe(false);
 });
 
-Deno.test("validate gracefully handles unsupported functions (validator.js)", () => {
+test("validate gracefully handles unsupported functions (validator.js)", () => {
   const validator = createCustomFieldValidator(
     validaorJS as unknown as ValidateFunctions,
   );
@@ -162,10 +159,10 @@ Deno.test("validate gracefully handles unsupported functions (validator.js)", ()
     "nonExistentFunc",
     [],
   );
-  assertFalse(result);
+  expect(result).toBe(false);
 });
 
-Deno.test("Returns false for non-boolean return values (mockValidator)", () => {
+test("Returns false for non-boolean return values (mockValidator)", () => {
   const escapeSpy = spy(mockValidator, "escape");
 
   const validator = createCustomFieldValidator(
@@ -177,19 +174,17 @@ Deno.test("Returns false for non-boolean return values (mockValidator)", () => {
     "escape",
     [],
   );
-  assertFalse(result);
+  expect(result).toBe(false);
 
-  assertSpyCalls(escapeSpy, 1);
+  expect(escapeSpy.callCount).toBe(1);
 
-  assertSpyCall(escapeSpy, 0, {
-    args: ["test value"],
-    returned: "test value",
-  });
+  expect(escapeSpy.getCall(0).args[0]).toBe("test value");
+  expect(escapeSpy.getCall(0).returnValue).toBe("test value");
 
   escapeSpy.restore();
 });
 
-Deno.test("Returns false for non-boolean return values (validator.js)", () => {
+test("Returns false for non-boolean return values (validator.js)", () => {
   const escapeSpy = spy(validaorJS, "escape");
 
   const validator = createCustomFieldValidator(
@@ -201,19 +196,16 @@ Deno.test("Returns false for non-boolean return values (validator.js)", () => {
     "escape",
     [],
   );
-  assertFalse(result);
+  expect(result).toBe(false);
 
-  assertSpyCalls(escapeSpy, 1);
-
-  assertSpyCall(escapeSpy, 0, {
-    args: ["test value"],
-    returned: "test value",
-  });
+  expect(escapeSpy.callCount).toBe(1);
+  expect(escapeSpy.getCall(0).args[0]).toBe("test value");
+  expect(escapeSpy.getCall(0).returnValue).toBe("test value");
 
   escapeSpy.restore();
 });
 
-Deno.test("validate handles non-function values gracefully (mockValidator)", () => {
+test("validate handles non-function values gracefully (mockValidator)", () => {
   const validator = createCustomFieldValidator(
     mockValidator as unknown as ValidateFunctions,
   );
@@ -223,5 +215,5 @@ Deno.test("validate handles non-function values gracefully (mockValidator)", () 
     "notFunction",
     [],
   );
-  assertFalse(result);
+  expect(result).toBe(false);
 });

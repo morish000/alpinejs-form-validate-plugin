@@ -1,6 +1,6 @@
 > This document was originally written in Japanese, and the English version is
 > machine translated. For the original, please refer to
-> [README_ja.md](README_ja.md).
+> [README_ja.md](https://github.com/morish000/alpinejs-form-validate-plugin/blob/main/README_ja.md).
 
 # Project Status
 

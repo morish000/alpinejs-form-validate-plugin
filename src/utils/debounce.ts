@@ -2,8 +2,6 @@
  * @module debounceUtility
  * This module provides a debounce utility function to delay invoking a function until after a specified wait time.
  */
-
-// deno-lint-ignore no-unused-vars
 import type { Debounce, LimittedHandler } from "../types/utils_types.ts";
 
 /**
@@ -18,7 +16,7 @@ import type { Debounce, LimittedHandler } from "../types/utils_types.ts";
  * @returns {LimittedHandler} The debounced function with a cancel method.
  */
 export const debounce: Debounce = (el, func, wait, immediate) => {
-  let timeout: number | null;
+  let timeout: ReturnType<typeof setTimeout> | null;
   const debounced = function (e?: Event) {
     const callNow = immediate && !timeout;
     timeout && clearTimeout(timeout);

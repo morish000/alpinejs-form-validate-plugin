@@ -16,11 +16,11 @@ export const createMessageResolver = (): MessageResolver => ({
   /**
    * Adds an update listener for message changes.
    */
-  addUpdateListener: () => {},
+  addUpdateListener: () => { },
   /**
    * Removes an existing update listener.
    */
-  removeUpdateListener: () => {},
+  removeUpdateListener: () => { },
   /**
    * Resolves a message from given parameters.
    *

@@ -1,7 +1,6 @@
-import { assertEquals } from "jsr:@std/assert";
-import { formatMessageConfig } from "./message_config.ts";
+import { formatMessageConfig } from "./message_config";
 
-Deno.test("formatMessageConfig correctly formats input with single and multiple messages", () => {
+test("formatMessageConfig correctly formats input with single and multiple messages", () => {
   const input = {
     valueMissing: "singleMessage",
     typeMismatch: ["message1", "message2"],
@@ -12,5 +11,5 @@ Deno.test("formatMessageConfig correctly formats input with single and multiple 
     typeMismatch: ["message1", "message2"],
   };
 
-  assertEquals(formatMessageConfig(input), expected);
+  expect(formatMessageConfig(input)).toEqual(expected)
 });

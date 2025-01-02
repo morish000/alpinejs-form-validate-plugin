@@ -3,8 +3,6 @@
  * This module provides a utility function to deeply merge multiple objects into the first object.
  */
 
-// deno-lint-ignore-file no-explicit-any
-
 /**
  * Deeply merges multiple objects into the first object.
  * Functions are not merged, but all other types are recursively merged.

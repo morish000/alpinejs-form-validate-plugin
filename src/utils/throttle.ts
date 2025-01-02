@@ -2,8 +2,6 @@
  * @module throttleUtility
  * This module provides a throttle utility function to limit the rate at which a specified function can be invoked.
  */
-
-// deno-lint-ignore no-unused-vars
 import type { LimittedHandler, Throttle } from "../types/utils_types.ts";
 
 /**
@@ -23,7 +21,7 @@ export const throttle: Throttle = (
   wait,
   { leading = true, trailing = true } = {},
 ) => {
-  let lastFunc: number | null;
+  let lastFunc: ReturnType<typeof setTimeout> | null;
   let lastRan: number = 0;
   const throttled = function (e?: Event) {
     const now = Date.now();

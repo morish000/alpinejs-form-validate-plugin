@@ -1,12 +1,10 @@
-// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
-import { assert, assertFalse, assertStrictEquals } from "jsr:@std/assert";
 import { fireEvent } from "@testing-library/dom";
 import i18next, { type InitOptions } from "i18next";
 import i18nextFsBackend from "i18next-fs-backend";
-import { createI18NextPlugin } from "../src/i18next/alpinejs_i18next_plugin.ts";
-import { createI18NextMessageResolver } from "../src/i18next/i18next_message_resolver.ts";
-import { createValidatePlugin } from "../src/alpinejs_form_validate_plugin.ts";
+import { createI18NextPlugin } from "../src/i18next/alpinejs_i18next_plugin";
+import { createI18NextMessageResolver } from "../src/i18next/i18next_message_resolver";
+import { createValidatePlugin } from "../src/alpinejs_form_validate_plugin";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 
@@ -35,8 +33,9 @@ globalThis.document = document;
 globalThis.MutationObserver = MutationObserver;
 globalThis.CustomEvent = CustomEvent;
 
-// @deno-types="@types/alpinejs"
-const { Alpine } = await import("alpinejs");
+// const { default: Alpine } = await import("alpinejs");
+// This workaround is necessary to ensure compatibility when running with Jest
+const Alpine = ((await import("alpinejs")) as unknown as any).Alpine;
 
 const alpineInitializeWaiter = () => {
   let alpineInitialized = false;
@@ -44,7 +43,6 @@ const alpineInitializeWaiter = () => {
   document.addEventListener("alpine:init", () => {
     alpineInitialized = true;
   }, { once: true });
-
   return async function waitAlpineInitialized() {
     if (!alpineInitialized) {
       await new Promise((resolve) => {
@@ -55,6 +53,7 @@ const alpineInitializeWaiter = () => {
 };
 
 const waitAlpineInitialized = alpineInitializeWaiter();
+
 
 i18next.on("initialized", () => {
   const i18nStore = Alpine.reactive(
@@ -93,7 +92,7 @@ i18next
 
 await waitAlpineInitialized();
 
-Deno.test("i18next validator", async () => {
+test("i18next validator", async () => {
   document.body.innerHTML = `
   <form x-validate-form autocomplete="off" novalidate>
     <input id="text-1" name="text-1" type="text" required x-validate="{
@@ -124,41 +123,41 @@ Deno.test("i18next validator", async () => {
 
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "This value is required. text-1");
-  assertStrictEquals(p1.textContent, "This value is required. text-1");
-  assertFalse(text1.validity.valid);
+  expect(text1.validationMessage).toBe("This value is required. text-1");
+  expect(p1.textContent).toBe("This value is required. text-1");
+  expect(text1.validity.valid).toBe(false);
 
   fireEvent.click(ja);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "この値は必須です。text-1");
-  assertStrictEquals(p1.textContent, "この値は必須です。text-1");
-  assertFalse(text1.validity.valid);
+  expect(text1.validationMessage).toBe("この値は必須です。text-1");
+  expect(p1.textContent).toBe("この値は必須です。text-1");
+  expect(text1.validity.valid).toBe(false);
 
   fireEvent.click(en);
   fireEvent.change(text1, {
     target: { value: "a" },
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(
-    text1.validationMessage,
-    "Please enter at least 2 characters.",
-  );
-  assertStrictEquals(p1.textContent, "Please enter at least 2 characters.");
-  assertFalse(text1.validity.valid);
+  expect(
+    text1.validationMessage).toBe(
+      "Please enter at least 2 characters.",
+    );
+  expect(p1.textContent).toBe("Please enter at least 2 characters.");
+  expect(text1.validity.valid).toBe(false);
 
   fireEvent.click(ja);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "2 文字以上で入力してください。");
-  assertStrictEquals(p1.textContent, "2 文字以上で入力してください。");
-  assertFalse(text1.validity.valid);
+  expect(text1.validationMessage).toBe("2 文字以上で入力してください。");
+  expect(p1.textContent).toBe("2 文字以上で入力してください。");
+  expect(text1.validity.valid).toBe(false);
 
   fireEvent.change(text1, {
     target: { value: "ab" },
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "");
-  assertStrictEquals(p1.textContent, "");
-  assert(text1.validity.valid);
+  expect(text1.validationMessage).toBe("");
+  expect(p1.textContent).toBe("");
+  expect(text1.validity.valid);
 
   document.body.innerHTML = "";
 });

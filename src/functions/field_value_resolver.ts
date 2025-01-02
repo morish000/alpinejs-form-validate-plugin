@@ -73,6 +73,6 @@ export const createFieldValueResolver = (): FieldValueResolver => ({
     !value
       ? true
       : typeof value === "string"
-      ? value.trim() === ""
-      : value.length === 0,
+        ? value.trim() === ""
+        : value.length === 0,
 });

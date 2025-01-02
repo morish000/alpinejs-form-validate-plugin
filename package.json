@@ -1,2 +1,111 @@
 {
+  "name": "@morish000/alpinejs-form-validate-plugin",
+  "version": "0.1.5",
+  "description": "Form Validate Plugin for Alpine.js",
+  "keywords": [
+    "alpinejs",
+    "form",
+    "validation"
+  ],
+  "homepage": "https://github.com/morish000/alpinejs-form-validate-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/morish000/alpinejs-form-validate-plugin/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morish000/alpinejs-form-validate-plugin.git"
+  },
+  "license": "MIT",
+  "author": "morish000",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "compile": "tsc && tsc --project tsconfig.cjs.json",
+    "build": "tsx build.ts",
+    "test": "rm -rf coverage && jest --coverage",
+    "test-lcov": "npm run test && rm -rf coverage-lcov && genhtml --ignore-errors category --branch-coverage --highlight --legend --function-coverage -o ./coverage-lcov ./coverage/lcov.info",
+    "test-simpleUsage": "jest --config=jest.config.test.js ./test/simpleUsage.ts",
+    "test-i18next": "jest --config=jest.config.test.js ./test/i18next.ts",
+    "test-customValidator": "jest --config=jest.config.test.js ./test/customValidator.ts",
+    "test-i18nextValidator": "jest --config=jest.config.test.js ./test/i18nextValidator.ts"
+  },
+  "exports": {
+    ".": {
+      "types": "./types/mod.d.ts",
+      "import": "./esm/mod.js",
+      "require": "./cjs/mod.js"
+    },
+    "./plugin": {
+      "types": "./types/alpinejs_form_validate_plugin.d.ts",
+      "import": "./esm/alpinejs_form_validate_plugin.js",
+      "require": "./cjs/alpinejs_form_validate_plugin.js"
+    },
+    "./config": {
+      "types": "./types/config/index.d.ts",
+      "import": "./esm/config/index.js",
+      "require": "./cjs/config/index.js"
+    },
+    "./functions": {
+      "types": "./types/functions/index.d.ts",
+      "import": "./esm/functions/index.js",
+      "require": "./cjs/functions/index.js"
+    },
+    "./i18next/alpinejs_i18next_plugin": {
+      "types": "./types/i18next/alpinejs_i18next_plugin.d.ts",
+      "import": "./esm/i18next/alpinejs_i18next_plugin.js",
+      "require": "./cjs/i18next/alpinejs_i18next_plugin.js"
+    },
+    "./i18next/i18next_message_resolver": {
+      "types": "./types/i18next/i18next_message_resolver.d.ts",
+      "import": "./esm/i18next/i18next_message_resolver.js",
+      "require": "./cjs/i18next/i18next_message_resolver.js"
+    },
+    "./utils": {
+      "types": "./types/utils/index.d.ts",
+      "import": "./esm/utils/index.js",
+      "require": "./cjs/utils/index.js"
+    },
+    "./validators": {
+      "types": "./types/validators/index.d.ts",
+      "import": "./esm/validators/index.js",
+      "require": "./cjs/validators/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "esm",
+    "cjs",
+    "types",
+    "README.md",
+    "README_ja.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "alpinejs": "^3.14.8",
+    "i18next": "^24.2.0",
+    "i18next-browser-languagedetector": "^8.0.2",
+    "i18next-http-backend": "^3.0.1",
+    "validator": "^13.12.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@types/alpinejs": "^3.13.11",
+    "@types/jest": "^29.5.14",
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.10.2",
+    "@types/sinon": "^17.0.3",
+    "@types/validator": "^13.12.2",
+    "esbuild": "^0.24.2",
+    "i18next-fs-backend": "^2.6.0",
+    "jest": "^29.7.0",
+    "jsdom": "^25.0.1",
+    "sinon": "^19.0.2",
+    "ts-jest": "^29.2.5",
+    "ts-jest-resolver": "^2.0.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
 }

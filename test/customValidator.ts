@@ -1,12 +1,9 @@
-// @deno-types="@types/jsdom"
+import type { ValidateFunctions } from "../src/types/functions_types.ts";
 import { JSDOM } from "jsdom";
 import { fireEvent } from "@testing-library/dom";
-import { assert, assertFalse, assertStrictEquals } from "jsr:@std/assert";
-// @deno-types="@types/validator"
 import validator from "validator";
-import { createCustomFieldValidator } from "../src/functions/index.ts";
-import { createValidatePlugin } from "../src/alpinejs_form_validate_plugin.ts";
-import type { ValidateFunctions } from "../src/types/functions_types.ts";
+import { createCustomFieldValidator } from "../src/functions/index";
+import { createValidatePlugin } from "../src/alpinejs_form_validate_plugin";
 
 const {
   window,
@@ -37,8 +34,9 @@ globalThis.CustomEvent = CustomEvent;
 globalThis.HTMLInputElement = HTMLInputElement;
 globalThis.HTMLSelectElement = HTMLSelectElement;
 
-// @deno-types="@types/alpinejs"
-const { Alpine } = await import("alpinejs");
+// const { default: Alpine } = await import("alpinejs");
+// This workaround is necessary to ensure compatibility when running with Jest
+const Alpine = ((await import("alpinejs")) as unknown as any).Alpine;
 
 const alpineInitializeWaiter = () => {
   let alpineInitialized = false;
@@ -63,7 +61,6 @@ Alpine.plugin(createValidatePlugin({
     customFieldValidators: [
       createCustomFieldValidator(validator as unknown as ValidateFunctions),
       createCustomFieldValidator({
-        // deno-lint-ignore no-explicit-any
         maxFileSize: (value: any, size) =>
           value.length == 1 && value[0].size < size,
       }),
@@ -73,7 +70,7 @@ Alpine.plugin(createValidatePlugin({
 Alpine.start();
 await waitAlpineInitialized();
 
-Deno.test("custom validators", async () => {
+test("custom validators", async () => {
   document.body.innerHTML = `
     <form x-validate-form autocomplete="off" novalidate>
       <input id="text-1" name="text-1" type="text" required x-validate="{
@@ -123,15 +120,15 @@ Deno.test("custom validators", async () => {
 
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "text-1 is required");
-  assertStrictEquals(p1.textContent, "text-1 is required");
-  assertStrictEquals(text2.validationMessage, "text-2 is required");
-  assertStrictEquals(p2.textContent, "text-2 is required");
-  assertStrictEquals(file1.validationMessage, "");
-  assertStrictEquals(p3.textContent, "");
-  assertFalse(text1.validity.valid);
-  assertFalse(text2.validity.valid);
-  assert(file1.validity.valid);
+  expect(text1.validationMessage).toBe("text-1 is required");
+  expect(p1.textContent).toBe("text-1 is required");
+  expect(text2.validationMessage).toBe("text-2 is required");
+  expect(p2.textContent).toBe("text-2 is required");
+  expect(file1.validationMessage).toBe("");
+  expect(p3.textContent).toBe("");
+  expect(text1.validity.valid).toBe(false);
+  expect(text2.validity.valid).toBe(false);
+  expect(file1.validity.valid);
 
   fireEvent.input(text1, {
     target: { value: "a" },
@@ -149,21 +146,21 @@ Deno.test("custom validators", async () => {
   });
 
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "Please include 'abc'.");
-  assertStrictEquals(p1.textContent, "Please include 'abc'.");
-  assertStrictEquals(text2.validationMessage, "Please enter in uppercase.");
-  assertStrictEquals(p2.textContent, "Please enter in uppercase.");
-  assertStrictEquals(
-    file1.validationMessage,
-    "Please select a file smaller than 256 bytes",
-  );
-  assertStrictEquals(
-    p3.textContent,
-    "Please select a file smaller than 256 bytes",
-  );
-  assertFalse(text1.validity.valid);
-  assertFalse(text2.validity.valid);
-  assertFalse(file1.validity.valid);
+  expect(text1.validationMessage).toBe("Please include 'abc'.");
+  expect(p1.textContent).toBe("Please include 'abc'.");
+  expect(text2.validationMessage).toBe("Please enter in uppercase.");
+  expect(p2.textContent).toBe("Please enter in uppercase.");
+  expect(
+    file1.validationMessage).toBe(
+      "Please select a file smaller than 256 bytes",
+    );
+  expect(
+    p3.textContent).toBe(
+      "Please select a file smaller than 256 bytes",
+    );
+  expect(text1.validity.valid).toBe(false);
+  expect(text2.validity.valid).toBe(false);
+  expect(file1.validity.valid).toBe(false);
 
   fireEvent.input(text1, {
     target: { value: "-abc-" },
@@ -182,18 +179,18 @@ Deno.test("custom validators", async () => {
 
   await new Promise((resolve) => setTimeout(resolve, 1));
 
-  assertStrictEquals(text1.validationMessage, "");
-  assertStrictEquals(p1.textContent, "");
-  assertStrictEquals(text2.validationMessage, "");
-  assertStrictEquals(p2.textContent, "");
-  assertStrictEquals(
-    file1.validationMessage,
-    "",
-  );
-  assertStrictEquals(p3.textContent, "");
-  assert(text1.validity.valid);
-  assert(text2.validity.valid);
-  assert(file1.validity.valid);
+  expect(text1.validationMessage).toBe("");
+  expect(p1.textContent).toBe("");
+  expect(text2.validationMessage).toBe("");
+  expect(p2.textContent).toBe("");
+  expect(
+    file1.validationMessage).toBe(
+      "",
+    );
+  expect(p3.textContent).toBe("");
+  expect(text1.validity.valid);
+  expect(text2.validity.valid);
+  expect(file1.validity.valid);
 
   document.body.innerHTML = "";
 });

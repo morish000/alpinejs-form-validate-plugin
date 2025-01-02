@@ -1,9 +1,7 @@
-import { assertEquals, assertStrictEquals } from "jsr:@std/assert";
+import { JSDOM } from "jsdom";
 import {
   createHtml5ValidationMessageResolver,
-} from "./html5_validation_message_resolver.ts";
-// @deno-types="@types/jsdom"
-import { JSDOM } from "jsdom";
+} from "./html5_validation_message_resolver";
 
 const {
   window,
@@ -21,23 +19,23 @@ function createDummyElement(
   return el;
 }
 
-Deno.test("createHtml5ValidationMessageResolver - Returns null for a valid element", () => {
+test("createHtml5ValidationMessageResolver - Returns null for a valid element", () => {
   const resolver = createHtml5ValidationMessageResolver();
   const el = createDummyElement();
   el.checkValidity = () => true;
   const messages = {};
-  assertStrictEquals(resolver(el, messages), null);
+  expect(resolver(el, messages)).toBe(null);
 });
 
-Deno.test("createHtml5ValidationMessageResolver - Uses custom validation message when no message resource is found", () => {
+test("createHtml5ValidationMessageResolver - Uses custom validation message when no message resource is found", () => {
   const resolver = createHtml5ValidationMessageResolver();
   const el = createDummyElement();
   el.setCustomValidity("test");
   const messages = {};
-  assertEquals(resolver(el, messages), ["test"]);
+  expect(resolver(el, messages)).toEqual(["test"]);
 });
 
-Deno.test("createHtml5ValidationMessageResolver - Returns configured message for an invalid element", () => {
+test("createHtml5ValidationMessageResolver - Returns configured message for an invalid element", () => {
   const resolver = createHtml5ValidationMessageResolver();
   const el = createDummyElement();
 
@@ -45,5 +43,5 @@ Deno.test("createHtml5ValidationMessageResolver - Returns configured message for
 
   const messages = { valueMissing: ["Value is missing"] };
 
-  assertEquals(resolver(el, messages), ["Value is missing"]);
+  expect(resolver(el, messages)).toEqual(["Value is missing"]);
 });

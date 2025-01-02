@@ -57,8 +57,8 @@ export const formatValidationConfig = (
         ? Array.isArray(value.v)
           ? value.v as FunctionParameter[]
           : typeof value.v === "function"
-          ? value.v as ValidatorFunction
-          : [value.v as FunctionParameter]
+            ? value.v as ValidatorFunction
+            : [value.v as FunctionParameter]
         : null;
       /**
        * @type {FunctionParameter[]}

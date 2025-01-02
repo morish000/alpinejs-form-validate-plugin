@@ -1,19 +1,18 @@
-import { assertStrictEquals } from "jsr:@std/assert";
-import { assertSpyCalls, spy } from "jsr:@std/testing/mock";
-import { createMessageResolver } from "./message_resolver.ts";
+import { spy } from "sinon";
+import { createMessageResolver } from "./message_resolver";
 
-Deno.test("createMessageResolver - resolve() returns first argument as string", () => {
+test("createMessageResolver - resolve() returns first argument as string", () => {
   const resolver = createMessageResolver();
   const spyAddUpdateListener = spy(resolver, "addUpdateListener");
   const spyRemoveUpdateListener = spy(resolver, "removeUpdateListener");
 
-  resolver.addUpdateListener(() => {});
-  resolver.removeUpdateListener(() => {});
+  resolver.addUpdateListener(() => { });
+  resolver.removeUpdateListener(() => { });
 
-  assertSpyCalls(spyAddUpdateListener, 1);
-  assertSpyCalls(spyRemoveUpdateListener, 1);
-  assertStrictEquals(resolver.resolve("message", 123), "message");
-  assertStrictEquals(resolver.resolve(), "");
+  expect(spyAddUpdateListener.callCount).toBe(1);
+  expect(spyRemoveUpdateListener.callCount).toBe(1);
+  expect(resolver.resolve("message", 123)).toBe("message");
+  expect(resolver.resolve()).toBe("");
 
   spyAddUpdateListener.restore();
   spyRemoveUpdateListener.restore();

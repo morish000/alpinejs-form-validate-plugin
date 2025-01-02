@@ -1,10 +1,9 @@
-import { assertStrictEquals } from "jsr:@std/assert";
-import { assertSpyCalls, spy } from "jsr:@std/testing/mock";
-import { createI18NextMessageResolver } from "./i18next_message_resolver.ts";
 import type { i18n, TOptions } from "i18next";
-import type { AlpineWithWatch } from "../types/alpine_types.ts";
+import type { AlpineWithWatch } from "../types/alpine_types";
+import { spy } from "sinon";
+import { createI18NextMessageResolver } from "./i18next_message_resolver";
 
-Deno.test("i18NextMessageResolver: creates a message resolver correctly", () => {
+test("i18NextMessageResolver: creates a message resolver correctly", () => {
   const i18nMock = {
     exists: (key: string) => key === "existKey",
     t: (key: string, _options?: TOptions) => `translated: ${key}`,
@@ -14,7 +13,7 @@ Deno.test("i18NextMessageResolver: creates a message resolver correctly", () => 
   const t = spy(i18nMock, "t");
 
   const AlpineMock = {
-    watch: (_o: () => void, _c: () => void) => {},
+    watch: (_o: () => void, _c: () => void) => { },
   } as unknown as AlpineWithWatch;
 
   const watch = spy(AlpineMock, "watch");
@@ -26,25 +25,25 @@ Deno.test("i18NextMessageResolver: creates a message resolver correctly", () => 
 
   const resolver = createI18NextMessageResolver(store)(AlpineMock);
 
-  assertStrictEquals((watch.calls[0].args[0] as () => void)(), 123);
+  expect((watch.getCall(0).args[0] as () => void)()).toBe(123);
 
-  const listener = spy(() => {});
+  const listener = spy(() => { });
 
   resolver.addUpdateListener(listener);
 
-  (watch.calls[0].args[1] as () => void)();
-  assertSpyCalls(listener, 1);
+  (watch.getCall(0).args[1] as () => void)();
+  expect(listener.callCount).toBe(1);
 
   resolver.removeUpdateListener(listener);
 
-  (watch.calls[0].args[1] as () => void)();
-  assertSpyCalls(listener, 1);
+  (watch.getCall(0).args[1] as () => void)();
+  expect(listener.callCount).toBe(1);
 
-  assertStrictEquals(resolver.resolve("existKey"), "translated: existKey");
-  assertStrictEquals(resolver.resolve("nonExistKey"), "nonExistKey");
+  expect(resolver.resolve("existKey")).toBe("translated: existKey");
+  expect(resolver.resolve("nonExistKey")).toBe("nonExistKey");
 
-  assertSpyCalls(exists, 2);
-  assertSpyCalls(t, 1);
+  expect(exists.callCount).toBe(2);
+  expect(t.callCount).toBe(1);
 
   exists.restore();
   t.restore();

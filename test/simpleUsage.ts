@@ -1,10 +1,8 @@
-// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 import { fireEvent } from "@testing-library/dom";
-import { assert, assertFalse, assertStrictEquals } from "jsr:@std/assert";
 import {
   createValidatePluginDefault,
-} from "../src/alpinejs_form_validate_plugin.ts";
+} from "../src/alpinejs_form_validate_plugin";
 
 const {
   window,
@@ -35,8 +33,9 @@ globalThis.CustomEvent = CustomEvent;
 globalThis.HTMLInputElement = HTMLInputElement;
 globalThis.HTMLSelectElement = HTMLSelectElement;
 
-// @deno-types="@types/alpinejs"
-const { Alpine } = await import("alpinejs");
+// const { default: Alpine } = await import("alpinejs");
+// This workaround is necessary to ensure compatibility when running with Jest
+const Alpine = ((await import("alpinejs")) as unknown as any).Alpine;
 
 const alpineInitializeWaiter = () => {
   let alpineInitialized = false;
@@ -60,7 +59,7 @@ Alpine.plugin(createValidatePluginDefault);
 Alpine.start();
 await waitAlpineInitialized();
 
-Deno.test("Required Check for Text", async () => {
+test("Required Check for Text", async () => {
   document.body.innerHTML = `
   <form x-validate-form autocomplete="off" novalidate>
     <input id="text-1" name="text-1" type="text" required
@@ -82,22 +81,22 @@ Deno.test("Required Check for Text", async () => {
 
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "text-1 is required");
-  assertStrictEquals(p1.textContent, "text-1 is required");
-  assertFalse(text1.validity.valid);
+  expect(text1.validationMessage).toBe("text-1 is required");
+  expect(p1.textContent).toBe("text-1 is required");
+  expect(text1.validity.valid).toBe(false);
 
   fireEvent.input(text1, {
     target: { value: "test" },
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "");
-  assertStrictEquals(p1.textContent, "");
-  assert(text1.validity.valid);
+  expect(text1.validationMessage).toBe("");
+  expect(p1.textContent).toBe("");
+  expect(text1.validity.valid);
 
   document.body.innerHTML = "";
 });
 
-Deno.test("Required Check for Text Area", async () => {
+test("Required Check for Text Area", async () => {
   document.body.innerHTML = `
   <form x-validate-form autocomplete="off" novalidate>
     <textarea id="text-1" name="text-1" required
@@ -118,22 +117,22 @@ Deno.test("Required Check for Text Area", async () => {
 
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "text-1 is required");
-  assertStrictEquals(p1.textContent, "text-1 is required");
-  assertFalse(text1.validity.valid);
+  expect(text1.validationMessage).toBe("text-1 is required");
+  expect(p1.textContent).toBe("text-1 is required");
+  expect(text1.validity.valid).toBe(false);
 
   fireEvent.change(text1, {
     target: { value: "test" },
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(text1.validationMessage, "");
-  assertStrictEquals(p1.textContent, "");
-  assert(text1.validity.valid);
+  expect(text1.validationMessage).toBe("");
+  expect(p1.textContent).toBe("");
+  expect(text1.validity.valid);
 
   document.body.innerHTML = "";
 });
 
-Deno.test("Required Check for Radio Buttons", async () => {
+test("Required Check for Radio Buttons", async () => {
   document.body.innerHTML = `
   <form x-validate-form autocomplete="off" novalidate>
     <input id="radio-1" name="radio-1" type="radio" value="radio-1" required
@@ -156,22 +155,22 @@ Deno.test("Required Check for Radio Buttons", async () => {
 
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(radio1.validationMessage, "radio-1 is required");
-  assertStrictEquals(p1.textContent, "radio-1 is required");
-  assertFalse(radio1.validity.valid);
+  expect(radio1.validationMessage).toBe("radio-1 is required");
+  expect(p1.textContent).toBe("radio-1 is required");
+  expect(radio1.validity.valid).toBe(false);
 
   fireEvent.change(radio2, {
     target: { checked: true },
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(radio1.validationMessage, "");
-  assertStrictEquals(p1.textContent, "");
-  assert(radio1.validity.valid);
+  expect(radio1.validationMessage).toBe("");
+  expect(p1.textContent).toBe("");
+  expect(radio1.validity.valid);
 
   document.body.innerHTML = "";
 });
 
-Deno.test("File Size Check (multiple=false)", async () => {
+test("File Size Check (multiple=false)", async () => {
   document.body.innerHTML = `
   <form x-validate-form autocomplete="off" novalidate>
     <input id="file-1" name="file-1" type="file"
@@ -201,15 +200,15 @@ Deno.test("File Size Check (multiple=false)", async () => {
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
 
-  assertStrictEquals(
-    file1.validationMessage,
-    "Please select a file smaller than 256 bytes",
-  );
-  assertStrictEquals(
-    p1.textContent,
-    "Please select a file smaller than 256 bytes",
-  );
-  assertFalse(file1.validity.valid);
+  expect(
+    file1.validationMessage).toBe(
+      "Please select a file smaller than 256 bytes",
+    );
+  expect(
+    p1.textContent).toBe(
+      "Please select a file smaller than 256 bytes",
+    );
+  expect(file1.validity.valid).toBe(false);
 
   file = new File([new Uint8Array(255)], "example.txt", {
     type: "text/plain",
@@ -220,14 +219,14 @@ Deno.test("File Size Check (multiple=false)", async () => {
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
 
-  assertStrictEquals(file1.validationMessage, "");
-  assertStrictEquals(p1.textContent, "");
-  assert(file1.validity.valid);
+  expect(file1.validationMessage).toBe("");
+  expect(p1.textContent).toBe("");
+  expect(file1.validity.valid);
 
   document.body.innerHTML = "";
 });
 
-Deno.test("SELECT (multiple=true) - Require more than two selections", async () => {
+test("SELECT (multiple=true) - Require more than two selections", async () => {
   document.body.innerHTML = `
   <form x-validate-form autocomplete="off" novalidate>
   <select id="select-1" name="select-1" multiple required
@@ -255,46 +254,46 @@ Deno.test("SELECT (multiple=true) - Require more than two selections", async () 
 
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(
-    select1.validationMessage,
-    "Please select at least two options",
-  );
-  assertStrictEquals(
-    p1.textContent,
-    "Please select at least two options",
-  );
-  assertFalse(select1.validity.valid);
+  expect(
+    select1.validationMessage).toBe(
+      "Please select at least two options",
+    );
+  expect(
+    p1.textContent).toBe(
+      "Please select at least two options",
+    );
+  expect(select1.validity.valid).toBe(false);
 
   select1.options[0].selected = true;
   fireEvent.change(select1);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(
-    select1.validationMessage,
-    "Please select at least two options",
-  );
-  assertStrictEquals(
-    p1.textContent,
-    "Please select at least two options",
-  );
-  assertFalse(select1.validity.valid);
+  expect(
+    select1.validationMessage).toBe(
+      "Please select at least two options",
+    );
+  expect(
+    p1.textContent).toBe(
+      "Please select at least two options",
+    );
+  expect(select1.validity.valid).toBe(false);
 
   select1.options[1].selected = true;
   fireEvent.change(select1);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(
-    select1.validationMessage,
-    "",
-  );
-  assertStrictEquals(
-    p1.textContent,
-    "",
-  );
-  assert(select1.validity.valid);
+  expect(
+    select1.validationMessage).toBe(
+      "",
+    );
+  expect(
+    p1.textContent).toBe(
+      "",
+    );
+  expect(select1.validity.valid);
 
   document.body.innerHTML = "";
 });
 
-Deno.test("Checkbox Example - Require more than two selections", async () => {
+test("Checkbox Example - Require more than two selections", async () => {
   document.body.innerHTML = `
   <form x-validate-form autocomplete="off" novalidate>
     <input id="check-1" name="check-1" value="check-1" type="checkbox" required
@@ -320,15 +319,15 @@ Deno.test("Checkbox Example - Require more than two selections", async () => {
 
   fireEvent.click(submit);
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(
-    check1.validationMessage,
-    "Please select at least two options",
-  );
-  assertStrictEquals(
-    p1.textContent,
-    "Please select at least two options",
-  );
-  assertFalse(check1.validity.valid);
+  expect(
+    check1.validationMessage).toBe(
+      "Please select at least two options",
+    );
+  expect(
+    p1.textContent).toBe(
+      "Please select at least two options",
+    );
+  expect(check1.validity.valid).toBe(false);
 
   fireEvent.change(check1, {
     target: {
@@ -336,15 +335,15 @@ Deno.test("Checkbox Example - Require more than two selections", async () => {
     },
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(
-    check1.validationMessage,
-    "Please select at least two options",
-  );
-  assertStrictEquals(
-    p1.textContent,
-    "Please select at least two options",
-  );
-  assertFalse(check1.validity.valid);
+  expect(
+    check1.validationMessage).toBe(
+      "Please select at least two options",
+    );
+  expect(
+    p1.textContent).toBe(
+      "Please select at least two options",
+    );
+  expect(check1.validity.valid).toBe(false);
 
   fireEvent.change(check2, {
     target: {
@@ -352,15 +351,15 @@ Deno.test("Checkbox Example - Require more than two selections", async () => {
     },
   });
   await new Promise((resolve) => setTimeout(resolve, 1));
-  assertStrictEquals(
-    check1.validationMessage,
-    "",
-  );
-  assertStrictEquals(
-    p1.textContent,
-    "",
-  );
-  assert(check1.validity.valid);
+  expect(
+    check1.validationMessage).toBe(
+      "",
+    );
+  expect(
+    p1.textContent).toBe(
+      "",
+    );
+  expect(check1.validity.valid);
 
   document.body.innerHTML = "";
 });

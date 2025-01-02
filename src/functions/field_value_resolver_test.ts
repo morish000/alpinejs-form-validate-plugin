@@ -1,14 +1,6 @@
-import {
-  assert,
-  assertEquals,
-  assertFalse,
-  assertStrictEquals,
-  assertThrows,
-} from "jsr:@std/assert";
-import { createFieldValueResolver } from "./field_value_resolver.ts";
-// @deno-types="@types/jsdom"
 import { JSDOM } from "jsdom";
 import { fireEvent } from "@testing-library/dom";
+import { createFieldValueResolver } from "./field_value_resolver";
 
 const {
   window,
@@ -39,17 +31,17 @@ function createDummyElement(
   return el;
 }
 
-Deno.test("createFieldValueResolver - resolve()/isEmpty() with text input", () => {
+test("createFieldValueResolver - resolve()/isEmpty() with text input", () => {
   const { resolve, isEmpty } = createFieldValueResolver();
   const form = window.document.createElement("form");
   const el = createDummyElement();
   el.value = "test value";
   form.appendChild(el);
-  assertStrictEquals(resolve(el), "test value");
-  assertFalse(isEmpty(resolve(el)));
+  expect(resolve(el)).toBe("test value");
+  expect(isEmpty(resolve(el))).toBe(false);
 });
 
-Deno.test("createFieldValueResolver - resolve() with checked radio input", () => {
+test("createFieldValueResolver - resolve() with checked radio input", () => {
   const { resolve, isEmpty } = createFieldValueResolver();
   const form = window.document.createElement("form");
   const el1 = createDummyElement("radio", "test");
@@ -59,11 +51,11 @@ Deno.test("createFieldValueResolver - resolve() with checked radio input", () =>
   const el2 = createDummyElement("radio", "test");
   el2.value = "radio2";
   form.appendChild(el2);
-  assertStrictEquals(resolve(el1), "radio1");
-  assertFalse(isEmpty(resolve(el1)));
+  expect(resolve(el1)).toBe("radio1");
+  expect(isEmpty(resolve(el1))).toBe(false);
 });
 
-Deno.test("createFieldValueResolver - resolve() with unchecked radio input", () => {
+test("createFieldValueResolver - resolve() with unchecked radio input", () => {
   const { resolve, isEmpty } = createFieldValueResolver();
   const form = window.document.createElement("form");
   const el1 = createDummyElement("radio", "test");
@@ -72,11 +64,11 @@ Deno.test("createFieldValueResolver - resolve() with unchecked radio input", () 
   const el2 = createDummyElement("radio", "test");
   el2.value = "radio2";
   form.appendChild(el2);
-  assertStrictEquals(resolve(el1), "");
-  assert(isEmpty(resolve(el1)));
+  expect(resolve(el1)).toBe("");
+  expect(isEmpty(resolve(el1)));
 });
 
-Deno.test("createFieldValueResolver - resolve() with multiple checked checkboxes", () => {
+test("createFieldValueResolver - resolve() with multiple checked checkboxes", () => {
   const { resolve, isEmpty } = createFieldValueResolver();
   const form = window.document.createElement("form");
   const el1 = createDummyElement("checkbox", "test");
@@ -87,11 +79,11 @@ Deno.test("createFieldValueResolver - resolve() with multiple checked checkboxes
   el2.checked = true;
   form.appendChild(el1);
   form.appendChild(el2);
-  assertEquals(resolve(el1), ["1", "2"]);
-  assertFalse(isEmpty(resolve(el1)));
+  expect(resolve(el1)).toEqual(["1", "2"]);
+  expect(isEmpty(resolve(el1))).toBe(false);
 });
 
-Deno.test("createFieldValueResolver - resolve() with unchecked checkboxes", () => {
+test("createFieldValueResolver - resolve() with unchecked checkboxes", () => {
   const { resolve, isEmpty } = createFieldValueResolver();
   const form = window.document.createElement("form");
   const el1 = createDummyElement("checkbox", "test");
@@ -100,11 +92,11 @@ Deno.test("createFieldValueResolver - resolve() with unchecked checkboxes", () =
   el2.value = "2";
   form.appendChild(el1);
   form.appendChild(el2);
-  assertEquals(resolve(el1), []);
-  assert(isEmpty(resolve(el1)));
+  expect(resolve(el1)).toEqual([]);
+  expect(isEmpty(resolve(el1)));
 });
 
-Deno.test("createFieldValueResolver - resolve() with single selected file", () => {
+test("createFieldValueResolver - resolve() with single selected file", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -120,14 +112,14 @@ Deno.test("createFieldValueResolver - resolve() with single selected file", () =
     target: { files: [file] },
   });
 
-  assertStrictEquals(resolve(el).length, 1);
-  assertStrictEquals((resolve(el)[0] as File).name, "example.txt");
-  assertFalse(isEmpty(resolve(el)));
+  expect(resolve(el).length).toBe(1);
+  expect((resolve(el)[0] as File).name).toBe("example.txt");
+  expect(isEmpty(resolve(el))).toBe(false);
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() with multiple selected files", () => {
+test("createFieldValueResolver - resolve() with multiple selected files", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -147,15 +139,15 @@ Deno.test("createFieldValueResolver - resolve() with multiple selected files", (
     target: { files: [file1, file2] },
   });
 
-  assertStrictEquals(resolve(el).length, 2);
-  assertStrictEquals((resolve(el)[0] as File).name, "example1.txt");
-  assertStrictEquals((resolve(el)[1] as File).name, "example2.txt");
-  assertFalse(isEmpty(resolve(el)));
+  expect(resolve(el).length).toBe(2);
+  expect((resolve(el)[0] as File).name).toBe("example1.txt");
+  expect((resolve(el)[1] as File).name).toBe("example2.txt");
+  expect(isEmpty(resolve(el))).toBe(false);
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() with no selected file", () => {
+test("createFieldValueResolver - resolve() with no selected file", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -163,13 +155,13 @@ Deno.test("createFieldValueResolver - resolve() with no selected file", () => {
   const el = createDummyElement("file", "test");
 
   form.appendChild(el);
-  assertStrictEquals(resolve(el).length, 0);
-  assert(isEmpty(resolve(el)));
+  expect(resolve(el).length).toBe(0);
+  expect(isEmpty(resolve(el)));
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() handles null file value gracefully", () => {
+test("createFieldValueResolver - resolve() handles null file value gracefully", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -181,13 +173,13 @@ Deno.test("createFieldValueResolver - resolve() handles null file value graceful
   });
 
   form.appendChild(el);
-  assertStrictEquals(resolve(el).length, 0);
-  assert(isEmpty(resolve(el)));
+  expect(resolve(el).length).toBe(0);
+  expect(isEmpty(resolve(el)));
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() with select multiple and selections", () => {
+test("createFieldValueResolver - resolve() with select multiple and selections", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -206,13 +198,13 @@ Deno.test("createFieldValueResolver - resolve() with select multiple and selecti
   select.appendChild(option2);
 
   form.appendChild(select);
-  assertEquals(resolve(select), ["option1", "option2"]);
-  assertFalse(isEmpty(resolve(select)));
+  expect(resolve(select)).toEqual(["option1", "option2"]);
+  expect(isEmpty(resolve(select))).toBe(false);
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() with select multiple and no selection", () => {
+test("createFieldValueResolver - resolve() with select multiple and no selection", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -229,13 +221,13 @@ Deno.test("createFieldValueResolver - resolve() with select multiple and no sele
   select.appendChild(option2);
 
   form.appendChild(select);
-  assertEquals(resolve(select), []);
-  assert(isEmpty(resolve(select)));
+  expect(resolve(select)).toEqual([]);
+  expect(isEmpty(resolve(select)));
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() with single select and selected option", () => {
+test("createFieldValueResolver - resolve() with single select and selected option", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -252,13 +244,13 @@ Deno.test("createFieldValueResolver - resolve() with single select and selected 
   select.appendChild(option2);
 
   form.appendChild(select);
-  assertStrictEquals(resolve(select), "option1");
-  assertFalse(isEmpty(resolve(select)));
+  expect(resolve(select)).toBe("option1");
+  expect(isEmpty(resolve(select))).toBe(false);
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() with single select and no selection", () => {
+test("createFieldValueResolver - resolve() with single select and no selection", () => {
   setup();
 
   const { resolve, isEmpty } = createFieldValueResolver();
@@ -267,55 +259,53 @@ Deno.test("createFieldValueResolver - resolve() with single select and no select
 
   form.appendChild(select);
 
-  assertStrictEquals(resolve(select), "");
-  assert(isEmpty(resolve(select)));
+  expect(resolve(select)).toBe("");
+  expect(isEmpty(resolve(select)));
 
   teardown();
 });
 
-Deno.test("createFieldValueResolver - resolve() with textarea containing value", () => {
+test("createFieldValueResolver - resolve() with textarea containing value", () => {
   const { resolve, isEmpty } = createFieldValueResolver();
   const form = window.document.createElement("form");
   const textarea = window.document.createElement("textarea");
   textarea.value = "Sample text";
 
   form.appendChild(textarea);
-  assertStrictEquals(resolve(textarea), "Sample text");
-  assertFalse(isEmpty(resolve(textarea)));
+  expect(resolve(textarea)).toBe("Sample text");
+  expect(isEmpty(resolve(textarea))).toBe(false);
 });
 
-Deno.test("createFieldValueResolver - resolve() with empty textarea", () => {
+test("createFieldValueResolver - resolve() with empty textarea", () => {
   const { resolve, isEmpty } = createFieldValueResolver();
   const form = window.document.createElement("form");
   const textarea = window.document.createElement("textarea");
 
   form.appendChild(textarea);
-  assertStrictEquals(resolve(textarea), "");
-  assert(isEmpty(resolve(textarea)));
+  expect(resolve(textarea)).toBe("");
+  expect(isEmpty(resolve(textarea)));
 });
 
-Deno.test("createFieldValueResolver - resolve() throws error for radio without form", () => {
+test("createFieldValueResolver - resolve() throws error for radio without form", () => {
   const { resolve } = createFieldValueResolver();
   const el = createDummyElement();
   el.type = "radio";
-  assertThrows(
+  expect(
     () => {
       resolve(el);
-    },
-    Error,
-    "A form element is required.",
-  );
+    }).toThrow(
+      "A form element is required.",
+    );
 });
 
-Deno.test("createFieldValueResolver - resolve() throws error for checkbox without form", () => {
+test("createFieldValueResolver - resolve() throws error for checkbox without form", () => {
   const { resolve } = createFieldValueResolver();
   const el = createDummyElement();
   el.type = "checkbox";
-  assertThrows(
+  expect(
     () => {
       resolve(el);
-    },
-    Error,
-    "A form element is required.",
-  );
+    }).toThrow(
+      "A form element is required.",
+    );
 });

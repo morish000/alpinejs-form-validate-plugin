@@ -1,12 +1,10 @@
-import { assertEquals, assertNotEquals, assertThrows } from "jsr:@std/assert";
-import { assertSpyCall, assertSpyCalls, spy } from "jsr:@std/testing/mock";
-import { createInputRateLimitter } from "./input_rate_limitter.ts";
-import { debounce } from "../utils/debounce.ts";
-import { throttle } from "../utils/throttle.ts";
-import type { Debounce, Throttle } from "../types/utils_types.ts";
-import type { FieldValidationConfig } from "../types/config_types.ts";
-// @deno-types="@types/jsdom"
+import type { Debounce, Throttle } from "../types/utils_types";
+import type { FieldValidationConfig } from "../types/config_types";
+import { spy } from "sinon";
 import { JSDOM } from "jsdom";
+import { createInputRateLimitter } from "./input_rate_limitter";
+import { debounce } from "../utils/debounce";
+import { throttle } from "../utils/throttle";
 
 const {
   window,
@@ -31,7 +29,7 @@ const mockDebounce: Debounce = (
   _immediate: boolean = false,
 ) => {
   const r = (e?: Event | undefined) => func(e);
-  r.cancel = () => {};
+  r.cancel = () => { };
   return r;
 };
 
@@ -42,60 +40,59 @@ const mockThrottle: Throttle = (
   _options,
 ) => {
   const r = (e?: Event | undefined) => func(e);
-  r.cancel = () => {};
+  r.cancel = () => { };
   return r;
 };
 
-Deno.test("createInputRateLimitter - Returns the handler unchanged for invalid inputLimit values", () => {
+test("createInputRateLimitter - Returns the handler unchanged for invalid inputLimit values", () => {
   const rateLimitter = createInputRateLimitter(debounce, throttle);
   const el = createDummyElement();
-  const handler = () => {};
-  assertEquals(
+  const handler = () => { };
+  expect(
     rateLimitter(
       el,
       handler,
       { inputLimit: null } as unknown as FieldValidationConfig,
-    ),
-    handler,
-  );
-  assertEquals(
-    rateLimitter(el, handler, { inputLimit: "none" } as FieldValidationConfig),
-    handler,
-  );
-  assertEquals(
+    )).toEqual(
+      handler
+    );
+  expect(
+    rateLimitter(el, handler, { inputLimit: "none" } as FieldValidationConfig)).toEqual(
+      handler,
+    );
+  expect(
     rateLimitter(
       el,
       handler,
       { inputLimit: ":" } as unknown as FieldValidationConfig,
-    ),
-    handler,
-  );
+    )).toEqual(
+      handler,
+    );
 });
 
-Deno.test("createInputRateLimitter - Throws an error for unknown inputLimit", () => {
+test("createInputRateLimitter - Throws an error for unknown inputLimit", () => {
   const rateLimitter = createInputRateLimitter(debounce, throttle);
   const el = createDummyElement();
-  const handler = () => {};
+  const handler = () => { };
 
-  assertThrows(
+  expect(
     () =>
       rateLimitter(
         el,
         handler,
         { inputLimit: "unknown" } as unknown as FieldValidationConfig,
-      ),
-    Error,
-    "Input rate limitter not found: unknown.",
-  );
+      )).toThrow(
+        "Input rate limitter not found: unknown.",
+      );
 });
 
-Deno.test("createInputRateLimitter - Correctly calls debounce when inputLimit is 'debounce'", () => {
+test("createInputRateLimitter - Correctly calls debounce when inputLimit is 'debounce'", () => {
   const spyDebounce = spy(mockDebounce);
   const spyThrottle = spy(mockThrottle);
   const rateLimitter = createInputRateLimitter(spyDebounce, spyThrottle);
   const el = createDummyElement();
-  const spyHandler = spy(() => {});
-  assertNotEquals(
+  const spyHandler = spy(() => { });
+  expect(
     rateLimitter(el, spyHandler, {
       inputLimit: "debounce",
       inputLimitOpts: {
@@ -103,27 +100,21 @@ Deno.test("createInputRateLimitter - Correctly calls debounce when inputLimit is
           wait: 250,
         },
       },
-    } as FieldValidationConfig),
-    spyHandler,
-  );
-  assertSpyCalls(spyDebounce, 1);
-  assertSpyCalls(spyThrottle, 0);
-  assertSpyCall(
-    spyDebounce,
-    0,
-    {
-      args: [el, spyHandler, 250, undefined],
-    },
-  );
+    } as FieldValidationConfig)).not.toEqual(
+      spyHandler,
+    );
+  expect(spyDebounce.callCount).toBe(1);
+  expect(spyThrottle.callCount).toBe(0);
+  expect(spyDebounce.getCall(0).args).toEqual([el, spyHandler, 250, undefined]);
 });
 
-Deno.test("createInputRateLimitter - Handles debounce with custom wait time and immediate execution", () => {
+test("createInputRateLimitter - Handles debounce with custom wait time and immediate execution", () => {
   const spyDebounce = spy(mockDebounce);
   const spyThrottle = spy(mockThrottle);
   const rateLimitter = createInputRateLimitter(spyDebounce, spyThrottle);
   const el = createDummyElement();
-  const spyHandler = spy(() => {});
-  assertNotEquals(
+  const spyHandler = spy(() => { });
+  expect(
     rateLimitter(el, spyHandler, {
       inputLimit: "debounce:1000",
       inputLimitOpts: {
@@ -132,27 +123,21 @@ Deno.test("createInputRateLimitter - Handles debounce with custom wait time and 
           immediate: true,
         },
       },
-    } as unknown as FieldValidationConfig),
-    spyHandler,
-  );
-  assertSpyCalls(spyDebounce, 1);
-  assertSpyCalls(spyThrottle, 0);
-  assertSpyCall(
-    spyDebounce,
-    0,
-    {
-      args: [el, spyHandler, 1000, true],
-    },
-  );
+    } as unknown as FieldValidationConfig)).not.toEqual(
+      spyHandler,
+    );
+  expect(spyDebounce.callCount).toBe(1);
+  expect(spyThrottle.callCount).toBe(0);
+  expect(spyDebounce.getCall(0).args).toEqual([el, spyHandler, 1000, true]);
 });
 
-Deno.test("createInputRateLimitter - Validates debounce with wait time and no immediate execution", () => {
+test("createInputRateLimitter - Validates debounce with wait time and no immediate execution", () => {
   const spyDebounce = spy(mockDebounce);
   const spyThrottle = spy(mockThrottle);
   const rateLimitter = createInputRateLimitter(spyDebounce, spyThrottle);
   const el = createDummyElement();
-  const spyHandler = spy(() => {});
-  assertNotEquals(
+  const spyHandler = spy(() => { });
+  expect(
     rateLimitter(el, spyHandler, {
       inputLimit: "debounce",
       inputLimitOpts: {
@@ -161,27 +146,21 @@ Deno.test("createInputRateLimitter - Validates debounce with wait time and no im
           immediate: false,
         },
       },
-    } as FieldValidationConfig),
-    spyHandler,
-  );
-  assertSpyCalls(spyDebounce, 1);
-  assertSpyCalls(spyThrottle, 0);
-  assertSpyCall(
-    spyDebounce,
-    0,
-    {
-      args: [el, spyHandler, 2000, false],
-    },
-  );
+    } as FieldValidationConfig)).not.toEqual(
+      spyHandler,
+    );
+  expect(spyDebounce.callCount).toBe(1);
+  expect(spyThrottle.callCount).toBe(0);
+  expect(spyDebounce.getCall(0).args).toEqual([el, spyHandler, 2000, false]);
 });
 
-Deno.test("createInputRateLimitter - Correctly calls throttle when inputLimit is 'throttle'", () => {
+test("createInputRateLimitter - Correctly calls throttle when inputLimit is 'throttle'", () => {
   const spyDebounce = spy(mockDebounce);
   const spyThrottle = spy(mockThrottle);
   const rateLimitter = createInputRateLimitter(spyDebounce, spyThrottle);
   const el = createDummyElement();
-  const spyHandler = spy(() => {});
-  assertNotEquals(
+  const spyHandler = spy(() => { });
+  expect(
     rateLimitter(el, spyHandler, {
       inputLimit: "throttle",
       inputLimitOpts: {
@@ -189,27 +168,21 @@ Deno.test("createInputRateLimitter - Correctly calls throttle when inputLimit is
           wait: 500,
         },
       },
-    } as FieldValidationConfig),
-    spyHandler,
-  );
-  assertSpyCalls(spyDebounce, 0);
-  assertSpyCalls(spyThrottle, 1);
-  assertSpyCall(
-    spyThrottle,
-    0,
-    {
-      args: [el, spyHandler, 500, undefined],
-    },
-  );
+    } as FieldValidationConfig)).not.toEqual(
+      spyHandler,
+    );
+  expect(spyDebounce.callCount).toBe(0);
+  expect(spyThrottle.callCount).toBe(1);
+  expect(spyThrottle.getCall(0).args).toEqual([el, spyHandler, 500, undefined]);
 });
 
-Deno.test("createInputRateLimitter - Tests throttle behavior with custom wait time and options", () => {
+test("createInputRateLimitter - Tests throttle behavior with custom wait time and options", () => {
   const spyDebounce = spy(mockDebounce);
   const spyThrottle = spy(mockThrottle);
   const rateLimitter = createInputRateLimitter(spyDebounce, spyThrottle);
   const el = createDummyElement();
-  const spyHandler = spy(() => {});
-  assertNotEquals(
+  const spyHandler = spy(() => { });
+  expect(
     rateLimitter(el, spyHandler, {
       inputLimit: "throttle:1000",
       inputLimitOpts: {
@@ -221,30 +194,26 @@ Deno.test("createInputRateLimitter - Tests throttle behavior with custom wait ti
           },
         },
       },
-    } as unknown as FieldValidationConfig),
-    spyHandler,
-  );
-  assertSpyCalls(spyDebounce, 0);
-  assertSpyCalls(spyThrottle, 1);
-  assertSpyCall(
-    spyThrottle,
-    0,
-    {
-      args: [el, spyHandler, 1000, {
+    } as unknown as FieldValidationConfig)).not.toEqual(
+      spyHandler,
+    );
+  expect(spyDebounce.callCount).toBe(0);
+  expect(spyThrottle.callCount).toBe(1);
+  expect(
+    spyThrottle.getCall(0).args).toEqual(
+      [el, spyHandler, 1000, {
         leading: true,
         trailing: false,
-      }],
-    },
-  );
+      }]);
 });
 
-Deno.test("createInputRateLimitter - Confirms throttle with specific leading and trailing configurations", () => {
+test("createInputRateLimitter - Confirms throttle with specific leading and trailing configurations", () => {
   const spyDebounce = spy(mockDebounce);
   const spyThrottle = spy(mockThrottle);
   const rateLimitter = createInputRateLimitter(spyDebounce, spyThrottle);
   const el = createDummyElement();
-  const spyHandler = spy(() => {});
-  assertNotEquals(
+  const spyHandler = spy(() => { });
+  expect(
     rateLimitter(el, spyHandler, {
       inputLimit: "throttle",
       inputLimitOpts: {
@@ -256,19 +225,15 @@ Deno.test("createInputRateLimitter - Confirms throttle with specific leading and
           },
         },
       },
-    } as FieldValidationConfig),
-    spyHandler,
-  );
-  assertSpyCalls(spyDebounce, 0);
-  assertSpyCalls(spyThrottle, 1);
-  assertSpyCall(
-    spyThrottle,
-    0,
-    {
-      args: [el, spyHandler, 2000, {
-        leading: false,
-        trailing: true,
-      }],
-    },
+    } as FieldValidationConfig)).not.toEqual(
+      spyHandler,
+    );
+  expect(spyDebounce.callCount).toBe(0);
+  expect(spyThrottle.callCount).toBe(1);
+  expect(spyThrottle.getCall(0).args).toEqual(
+    [el, spyHandler, 2000, {
+      leading: false,
+      trailing: true,
+    }]
   );
 });

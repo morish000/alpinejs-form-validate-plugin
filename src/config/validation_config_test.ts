@@ -1,12 +1,11 @@
-import { assertEquals, assertThrows } from "jsr:@std/assert";
-import { formatValidationConfig } from "./validation_config.ts";
-import type { ValidatorFunction } from "../types/config_types.ts";
+import type { ValidatorFunction } from "../types/config_types";
+import { formatValidationConfig } from "./validation_config";
 
 const trueValidator: ValidatorFunction = (_el, _value) => {
   return true;
 };
 
-Deno.test("formatValidationConfig transforms abbreviated format to full format", () => {
+test("formatValidationConfig transforms abbreviated format to full format", () => {
   const input = {
     key1: [trueValidator, "message1"],
     key2: [trueValidator, ["message2a", "message2b"]],
@@ -49,10 +48,10 @@ Deno.test("formatValidationConfig transforms abbreviated format to full format",
     },
   };
 
-  assertEquals(formatValidationConfig(input), expected);
+  expect(formatValidationConfig(input)).toEqual(expected);
 });
 
-Deno.test("formatValidationConfig throws error for missing messages", () => {
+test("formatValidationConfig throws error for missing messages", () => {
   // Testing because the type definition should error when 'm' is missing, but it doesn't.
   const input = {
     key1: {
@@ -60,9 +59,7 @@ Deno.test("formatValidationConfig throws error for missing messages", () => {
     },
   };
 
-  assertThrows(
-    () => formatValidationConfig(input),
-    Error,
-    "Message undefined. validation key: key1",
-  );
+  expect(
+    () => formatValidationConfig(input))
+    .toThrow("Message undefined. validation key: key1");
 });

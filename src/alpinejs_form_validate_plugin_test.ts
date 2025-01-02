@@ -1,67 +1,56 @@
-// deno-lint-ignore-file no-explicit-any ban-types
-import {
-  assert,
-  assertEquals,
-  assertExists,
-  assertFalse,
-  assertStrictEquals,
-  assertThrows,
-} from "jsr:@std/assert";
-import { assertSpyCalls, spy } from "jsr:@std/testing/mock";
-import { formDefaultConfig } from "./config/default_config.ts";
+import type { Alpine, DirectiveData, DirectiveUtilities } from "alpinejs";
+import type { MessageStore } from "./types/functions_types";
+import { JSDOM } from "jsdom";
+import { spy } from "sinon";
+import { formDefaultConfig } from "./config/default_config";
 import {
   createValidatePlugin,
   createValidatePluginDefault,
-} from "./alpinejs_form_validate_plugin.ts";
-// @deno-types="@types/alpinejs"
-import type { Alpine, DirectiveData, DirectiveUtilities } from "alpinejs";
-import type { MessageStore } from "./types/functions_types.ts";
-// @deno-types="@types/jsdom"
-import { JSDOM } from "jsdom";
+} from "./alpinejs_form_validate_plugin";
 
 const createAlpineMock = () => ({
-  directive: (_name: string, _callback: Function) => {},
+  directive: (_name: string, _callback: Function) => { },
   prefixed: (str: string) => `x-${str}`,
   reactive: (o: object) => o,
   mutateDom: (f: () => void) => f(),
 } as unknown as Alpine);
 
 const createMockMessageResolver = (message: string) => ({
-  addUpdateListener: () => {},
-  removeUpdateListener: () => {},
+  addUpdateListener: () => { },
+  removeUpdateListener: () => { },
   resolve: (..._args: any[]) => {
     return message;
   },
 });
 
-Deno.test("createValidatePlugin - registers three directives", () => {
+test("createValidatePlugin - registers three directives", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
   createValidatePluginDefault(Alpine);
 
-  assertSpyCalls(directiveSpy, 3);
+  expect(directiveSpy.callCount).toBe(3);
   directiveSpy.restore();
 });
 
 // validate-form
 
-Deno.test("validate-form directive - sets initial validation configuration", () => {
+test("validate-form directive - sets initial validation configuration", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1] as Function;
+  const callback = directiveSpy.getCall(0).args[1] as Function;
 
   const mockElement = {
-    addEventListener: spy((_event: string, _handler: any) => {}),
-    removeEventListener: spy(() => {}),
+    addEventListener: spy((_event: string, _handler: any) => { }),
+    removeEventListener: spy(() => { }),
     _x_validation: undefined,
   };
 
   const mockEvaluate = (_expr: string) => (eval(`(${_expr})`));
-  const mockCleanup = spy((_fn: any) => {});
+  const mockCleanup = spy((_fn: any) => { });
 
   callback(
     mockElement as any, // el
@@ -72,27 +61,27 @@ Deno.test("validate-form directive - sets initial validation configuration", () 
     } as unknown as DirectiveUtilities,
   );
 
-  assertSpyCalls(mockElement.addEventListener, 1);
-  assertExists(mockElement._x_validation);
-  assertEquals(
-    mockElement._x_validation,
-    formDefaultConfig(mockElement as unknown as EventTarget),
-  );
+  expect(mockElement.addEventListener.callCount).toBe(1);
+  expect(mockElement._x_validation).toBeDefined();
+  expect(
+    mockElement._x_validation).toEqual(
+      formDefaultConfig(mockElement as unknown as EventTarget),
+    );
 
-  mockCleanup.calls[0].args[0]();
+  mockCleanup.getCall(0).args[0]();
 
-  assertSpyCalls(mockElement.removeEventListener, 1);
-  assertFalse("_x_validation" in mockElement);
+  expect(mockElement.removeEventListener.callCount).toBe(1);
+  expect("_x_validation" in mockElement).toBe(false);
 
   directiveSpy.restore();
 });
 
-Deno.test("validate-form directive - overrides default configuration", () => {
+test("validate-form directive - overrides default configuration", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
-  const addEventListener = spy((_e: string, _h: () => void) => {});
-  const removeEventListener = spy((_e: string, _h: () => void) => {});
+  const addEventListener = spy((_e: string, _h: () => void) => { });
+  const removeEventListener = spy((_e: string, _h: () => void) => { });
   createValidatePlugin({
     defaultFormOptions: {
       report: false,
@@ -105,16 +94,16 @@ Deno.test("validate-form directive - overrides default configuration", () => {
     },
   })(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1] as Function;
+  const callback = directiveSpy.getCall(0).args[1] as Function;
 
   const mockElement = {
-    addEventListener: spy((_event: string, _handler: any) => {}),
-    removeEventListener: spy(() => {}),
+    addEventListener: spy((_event: string, _handler: any) => { }),
+    removeEventListener: spy(() => { }),
     _x_validation: undefined,
   };
 
   const mockEvaluate = (_expr: string) => eval(`(${_expr})`);
-  const mockCleanup = spy((_fn: any) => {});
+  const mockCleanup = spy((_fn: any) => { });
 
   callback(
     mockElement as any, // el
@@ -125,26 +114,26 @@ Deno.test("validate-form directive - overrides default configuration", () => {
     } as unknown as DirectiveUtilities,
   );
 
-  assertSpyCalls(mockElement.addEventListener, 0);
-  assertSpyCalls(addEventListener, 1);
-  assertExists(mockElement._x_validation);
-  assertFalse((mockElement._x_validation as any).report);
-  assertEquals(
-    (mockElement._x_validation as any).trigger.target,
-    { addEventListener, removeEventListener },
-  );
+  expect(mockElement.addEventListener.callCount).toBe(0);
+  expect(addEventListener.callCount).toBe(1);
+  expect(mockElement._x_validation).toBeDefined();
+  expect((mockElement._x_validation as any).report).toBe(false);
+  expect(
+    (mockElement._x_validation as any).trigger.target).toEqual(
+      { addEventListener, removeEventListener }
+    );
 
-  mockCleanup.calls[0].args[0]();
+  mockCleanup.getCall(0).args[0]();
 
-  assertSpyCalls(mockElement.removeEventListener, 0);
-  assertSpyCalls(removeEventListener, 1);
-  assertFalse("_x_validation" in mockElement);
+  expect(mockElement.removeEventListener.callCount).toBe(0);
+  expect(removeEventListener.callCount).toBe(1);
+  expect("_x_validation" in mockElement).toBe(false);
 
   // overwite form element
 
   const eventTarget = {
-    addEventListener: spy((_e: string, _h: () => void) => {}),
-    removeEventListener: spy((_e: string, _h: () => void) => {}),
+    addEventListener: spy((_e: string, _h: () => void) => { }),
+    removeEventListener: spy((_e: string, _h: () => void) => { }),
   };
   (globalThis as any).eventTarget = eventTarget;
 
@@ -164,46 +153,46 @@ Deno.test("validate-form directive - overrides default configuration", () => {
     } as unknown as DirectiveUtilities,
   );
 
-  assertSpyCalls(mockElement.addEventListener, 0);
-  assertSpyCalls(addEventListener, 1);
-  assertSpyCalls(eventTarget.addEventListener, 1);
-  assertExists(mockElement._x_validation);
-  assert((mockElement._x_validation as any).report);
-  assertEquals(
-    (mockElement._x_validation as any).trigger.target,
-    eventTarget,
-  );
+  expect(mockElement.addEventListener.callCount).toBe(0);
+  expect(addEventListener.callCount).toBe(1);
+  expect(eventTarget.addEventListener.callCount).toBe(1);
+  expect(mockElement._x_validation).toBeDefined();
+  expect((mockElement._x_validation as any).report);
+  expect(
+    (mockElement._x_validation as any).trigger.target).toEqual(
+      eventTarget,
+    );
 
-  mockCleanup.calls[1].args[0]();
+  mockCleanup.getCall(1).args[0]();
 
-  assertSpyCalls(mockElement.removeEventListener, 0);
-  assertSpyCalls(removeEventListener, 1);
-  assertSpyCalls(eventTarget.removeEventListener, 1);
-  assertFalse("_x_validation" in mockElement);
+  expect(mockElement.removeEventListener.callCount).toBe(0);
+  expect(removeEventListener.callCount).toBe(1);
+  expect(eventTarget.removeEventListener.callCount).toBe(1);
+  expect("_x_validation" in mockElement).toBe(false);
 
   directiveSpy.restore();
   delete (globalThis as any).eventTarget;
 });
 
-Deno.test("validate-form directive - triggers validation event on success", () => {
+test("validate-form directive - triggers validation event on success", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1] as Function;
+  const callback = directiveSpy.getCall(0).args[1] as Function;
 
   const mockElement = {
-    addEventListener: spy((_event: string, _handler: any) => {}),
-    removeEventListener: () => {},
-    dispatchEvent: spy((_e: Event) => {}),
+    addEventListener: spy((_event: string, _handler: any) => { }),
+    removeEventListener: () => { },
+    dispatchEvent: spy((_e: Event) => { }),
     elements: [],
     reportValidity: () => true,
     _x_validation: undefined,
   };
 
   const mockEvaluate = (_expr: any) => ({});
-  const mockCleanup = spy((_fn: any) => {});
+  const mockCleanup = spy((_fn: any) => { });
 
   callback(
     mockElement as any,
@@ -214,42 +203,42 @@ Deno.test("validate-form directive - triggers validation event on success", () =
     } as unknown as DirectiveUtilities,
   );
 
-  mockElement.addEventListener.calls[0].args[1]();
+  mockElement.addEventListener.getCall(0).args[1]();
 
-  assertSpyCalls(mockElement.dispatchEvent, 1);
+  expect(mockElement.dispatchEvent.callCount).toBe(1);
 
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[0].args[0].type,
-    "x-validate:success",
-  );
+  expect(
+    mockElement.dispatchEvent.getCall(0).args[0].type).toBe(
+      "x-validate:success",
+    );
 
-  mockCleanup.calls[0].args[0]();
+  mockCleanup.getCall(0).args[0]();
 
   directiveSpy.restore();
 });
 
-Deno.test("validate-form directive - triggers validation event on failure", () => {
+test("validate-form directive - triggers validation event on failure", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[0].args[1] as Function;
+  const callback = directiveSpy.getCall(0).args[1] as Function;
 
   const mockElement = {
-    addEventListener: spy((_event: string, _handler: any) => {}),
-    removeEventListener: () => {},
-    dispatchEvent: spy((_e: Event) => {}),
+    addEventListener: spy((_event: string, _handler: any) => { }),
+    removeEventListener: () => { },
+    dispatchEvent: spy((_e: Event) => { }),
     elements: [],
     reportValidity: () => false,
     _x_validation: undefined,
   };
 
   const mockEvaluate = (_expr: string) => eval(`(${_expr})`);
-  const mockCleanup = spy((_fn: any) => {});
+  const mockCleanup = spy((_fn: any) => { });
 
-  const before = spy(() => {});
-  const after = spy(() => {});
+  const before = spy(() => { });
+  const after = spy(() => { });
   (globalThis as any).before = before;
   (globalThis as any).after = after;
   callback(
@@ -270,19 +259,19 @@ Deno.test("validate-form directive - triggers validation event on failure", () =
 
   const event = new CustomEvent("test");
   const preventDefault = spy(event, "preventDefault");
-  mockElement.addEventListener.calls[0].args[1](event);
+  mockElement.addEventListener.getCall(0).args[1](event);
 
-  assertSpyCalls(mockElement.dispatchEvent, 1);
-  assertSpyCalls(preventDefault, 1);
-  assertSpyCalls(before, 1);
-  assertSpyCalls(after, 1);
+  expect(mockElement.dispatchEvent.callCount).toBe(1);
+  expect(preventDefault.callCount).toBe(1);
+  expect(before.callCount).toBe(1);
+  expect(after.callCount).toBe(1);
 
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[0].args[0].type,
-    "x-validate:failed",
-  );
+  expect(
+    mockElement.dispatchEvent.getCall(0).args[0].type).toBe(
+      "x-validate:failed",
+    );
 
-  mockCleanup.calls[0].args[0]();
+  mockCleanup.getCall(0).args[0]();
   preventDefault.restore();
   directiveSpy.restore();
 
@@ -292,42 +281,41 @@ Deno.test("validate-form directive - triggers validation event on failure", () =
 
 // validate
 
-Deno.test("validate directive - initializes validation config and triggers success event", () => {
+test("validate directive - initializes validation config and triggers success event", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1] as Function;
+  const callback = directiveSpy.getCall(1).args[1] as Function;
 
   const mockElement = {
     id: "testField",
     name: "test",
     tagName: "text",
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    setCustomValidity: () => {},
-    dispatchEvent: spy((_e: Event) => {}),
+    addEventListener: () => { },
+    removeEventListener: () => { },
+    setCustomValidity: () => { },
+    dispatchEvent: spy((_e: Event) => { }),
     checkValidity: () => true,
     reportValidity: () => true,
     _x_validation: undefined,
   };
 
-  assertThrows(
+  expect(
     () =>
       callback(
         {} as any,
         { expression: "" } as DirectiveData,
         {
           evaluate: (_expr: any) => ({}),
-          cleanup: (_fn: any) => {},
+          cleanup: (_fn: any) => { },
         } as DirectiveUtilities,
-      ),
-    Error,
-    "must have an id and name attribute",
-  );
+      )).toThrow(
+        "must have an id and name attribute",
+      );
 
-  const mockCleanUp = spy((_fn: any) => {});
+  const mockCleanUp = spy((_fn: any) => { });
   callback(
     mockElement as any,
     { expression: "" } as DirectiveData,
@@ -337,24 +325,24 @@ Deno.test("validate directive - initializes validation config and triggers succe
     } as unknown as DirectiveUtilities,
   );
 
-  assertExists(mockElement._x_validation);
+  expect(mockElement._x_validation).toBeDefined();
 
   (mockElement._x_validation as any).validate();
 
-  assertSpyCalls(mockElement.dispatchEvent, 1);
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[0].args[0].type,
-    "x-validate:success",
-  );
+  expect(mockElement.dispatchEvent.callCount).toBe(1);
+  expect(
+    mockElement.dispatchEvent.getCall(0).args[0].type).toBe(
+      "x-validate:success",
+    );
 
-  mockCleanUp.calls[0].args[0]();
+  mockCleanUp.getCall(0).args[0]();
 
-  assertFalse("_x_validation" in mockElement);
+  expect("_x_validation" in mockElement).toBe(false);
 
   directiveSpy.restore();
 });
 
-Deno.test("validate directive - initializes and triggers failure event", () => {
+test("validate directive - initializes and triggers failure event", () => {
   const mockMessageResolver = createMockMessageResolver("resolved message");
 
   const Alpine = createAlpineMock();
@@ -373,16 +361,16 @@ Deno.test("validate directive - initializes and triggers failure event", () => {
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1] as Function;
+  const callback = directiveSpy.getCall(1).args[1] as Function;
 
   const mockElement = {
     id: "testField",
     name: "test",
     tagName: "text",
-    addEventListener: spy((_t: string, _h: () => void) => {}),
-    removeEventListener: spy((_t: string, _h: () => void) => {}),
-    setCustomValidity: () => {},
-    dispatchEvent: spy((_e: Event) => {}),
+    addEventListener: spy((_t: string, _h: () => void) => { }),
+    removeEventListener: spy((_t: string, _h: () => void) => { }),
+    setCustomValidity: () => { },
+    dispatchEvent: spy((_e: Event) => { }),
     checkValidity: () => false,
     reportValidity: () => false,
     validity: {
@@ -399,21 +387,20 @@ Deno.test("validate directive - initializes and triggers failure event", () => {
     _x_validation: undefined,
   };
 
-  assertThrows(
+  expect(
     () =>
       callback(
         {} as any,
         { expression: "" } as DirectiveData,
         {
           evaluate: (_expr: any) => ({}),
-          cleanup: (_fn: any) => {},
+          cleanup: (_fn: any) => { },
         } as DirectiveUtilities,
-      ),
-    Error,
-    "must have an id and name attribute",
-  );
+      )).toThrow(
+        "must have an id and name attribute",
+      );
 
-  const mockCleanUp = spy((_fn: any) => {});
+  const mockCleanUp = spy((_fn: any) => { });
   callback(
     mockElement as any,
     { expression: "" } as DirectiveData,
@@ -423,26 +410,26 @@ Deno.test("validate directive - initializes and triggers failure event", () => {
     } as unknown as DirectiveUtilities,
   );
 
-  assertExists(mockElement._x_validation);
-  assertSpyCalls(mockElement.addEventListener, 3);
+  expect(mockElement._x_validation).toBeDefined();
+  expect(mockElement.addEventListener.callCount).toBe(3);
 
   (mockElement._x_validation as any).validate();
 
-  assertSpyCalls(mockElement.dispatchEvent, 1);
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[0].args[0].type,
-    "x-validate:failed",
-  );
+  expect(mockElement.dispatchEvent.callCount).toBe(1);
+  expect(
+    mockElement.dispatchEvent.getCall(0).args[0].type).toBe(
+      "x-validate:failed",
+    );
 
-  mockCleanUp.calls[0].args[0]();
+  mockCleanUp.getCall(0).args[0]();
 
-  assertFalse("_x_validation" in mockElement);
-  assertSpyCalls(mockElement.removeEventListener, 3);
+  expect("_x_validation" in mockElement).toBe(false);
+  expect(mockElement.removeEventListener.callCount).toBe(3);
 
   directiveSpy.restore();
 });
 
-Deno.test("validate directive - executes before/after hooks on failure", async () => {
+test("validate directive - executes before/after hooks on failure", async () => {
   const mockMessageResolver = createMockMessageResolver("");
 
   const Alpine = createAlpineMock();
@@ -461,16 +448,16 @@ Deno.test("validate directive - executes before/after hooks on failure", async (
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1] as Function;
+  const callback = directiveSpy.getCall(1).args[1] as Function;
 
   const mockElement = {
     id: "testField",
     name: "test",
     tagName: "text",
-    addEventListener: spy((_t: string, _h: () => void) => {}),
-    removeEventListener: spy((_t: string, _h: () => void) => {}),
-    setCustomValidity: () => {},
-    dispatchEvent: spy((_e: Event) => {}),
+    addEventListener: spy((_t: string, _h: () => void) => { }),
+    removeEventListener: spy((_t: string, _h: () => void) => { }),
+    setCustomValidity: () => { },
+    dispatchEvent: spy((_e: Event) => { }),
     checkValidity: () => false,
     reportValidity: () => false,
     validity: {
@@ -492,10 +479,10 @@ Deno.test("validate directive - executes before/after hooks on failure", async (
     _x_validation: undefined,
   };
 
-  const mockCleanUp = spy((_fn: any) => {});
+  const mockCleanUp = spy((_fn: any) => { });
 
-  (globalThis as any).before = spy(() => {});
-  (globalThis as any).after = spy(() => {});
+  (globalThis as any).before = spy(() => { });
+  (globalThis as any).after = spy(() => { });
   callback(
     mockElement as any,
     {
@@ -523,53 +510,53 @@ Deno.test("validate directive - executes before/after hooks on failure", async (
     } as unknown as DirectiveUtilities,
   );
 
-  assertExists(mockElement._x_validation);
-  assertSpyCalls(mockElement.addEventListener, 3);
+  expect(mockElement._x_validation).toBeDefined();
+  expect(mockElement.addEventListener.callCount).toBe(3);
 
-  assertStrictEquals(mockElement.addEventListener.calls[0].args[0], "change");
-  mockElement.addEventListener.calls[0].args[1]();
-  assertSpyCalls((globalThis as any).before, 1);
-  assertSpyCalls((globalThis as any).after, 1);
-  assertSpyCalls(mockElement.dispatchEvent, 1);
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[0].args[0].type,
-    "x-validate:failed",
-  );
+  expect(mockElement.addEventListener.getCall(0).args[0]).toBe("change");
+  mockElement.addEventListener.getCall(0).args[1]();
+  expect((globalThis as any).before.callCount).toBe(1);
+  expect((globalThis as any).after.callCount).toBe(1);
+  expect(mockElement.dispatchEvent.callCount).toBe(1);
+  expect(
+    mockElement.dispatchEvent.getCall(0).args[0].type).toBe(
+      "x-validate:failed",
+    );
 
-  assertStrictEquals(mockElement.addEventListener.calls[1].args[0], "blur");
-  mockElement.addEventListener.calls[1].args[1]();
-  assertSpyCalls((globalThis as any).before, 2);
-  assertSpyCalls((globalThis as any).after, 2);
-  assertSpyCalls(mockElement.dispatchEvent, 2);
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[1].args[0].type,
-    "x-validate:failed",
-  );
+  expect(mockElement.addEventListener.getCall(1).args[0]).toBe("blur");
+  mockElement.addEventListener.getCall(1).args[1]();
+  expect((globalThis as any).before.callCount).toBe(2);
+  expect((globalThis as any).after.callCount).toBe(2);
+  expect(mockElement.dispatchEvent.callCount).toBe(2);
+  expect(
+    mockElement.dispatchEvent.getCall(1).args[0].type).toBe(
+      "x-validate:failed",
+    );
 
-  assertStrictEquals(mockElement.addEventListener.calls[2].args[0], "input");
-  mockElement.addEventListener.calls[2].args[1]();
+  expect(mockElement.addEventListener.getCall(2).args[0]).toBe("input");
+  mockElement.addEventListener.getCall(2).args[1]();
   await new Promise((resolve) => setTimeout(resolve, 500));
-  assertSpyCalls((globalThis as any).before, 3);
-  assertSpyCalls((globalThis as any).after, 3);
-  assertSpyCalls(mockElement.dispatchEvent, 3);
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[2].args[0].type,
-    "x-validate:failed",
-  );
+  expect((globalThis as any).before.callCount).toBe(3);
+  expect((globalThis as any).after.callCount).toBe(3);
+  expect(mockElement.dispatchEvent.callCount).toBe(3);
+  expect(
+    mockElement.dispatchEvent.getCall(2).args[0].type).toBe(
+      "x-validate:failed",
+    );
 
   (mockElement._x_validation as any).formSubmit = true;
   (mockElement._x_validation as any).validate();
 
-  assertSpyCalls(mockElement.dispatchEvent, 4);
-  assertStrictEquals(
-    mockElement.dispatchEvent.calls[3].args[0].type,
-    "x-validate:failed",
-  );
+  expect(mockElement.dispatchEvent.callCount).toBe(4);
+  expect(
+    mockElement.dispatchEvent.getCall(3).args[0].type).toBe(
+      "x-validate:failed",
+    );
 
-  mockCleanUp.calls[0].args[0]();
+  mockCleanUp.getCall(0).args[0]();
 
-  assertFalse("_x_validation" in mockElement);
-  assertSpyCalls(mockElement.removeEventListener, 3);
+  expect("_x_validation" in mockElement).toBe(false);
+  expect(mockElement.removeEventListener.callCount).toBe(3);
 
   delete (globalThis as any).before;
   delete (globalThis as any).after;
@@ -577,7 +564,7 @@ Deno.test("validate directive - executes before/after hooks on failure", async (
   directiveSpy.restore();
 });
 
-Deno.test("validate directive - no event listeners on all false config", () => {
+test("validate directive - no event listeners on all false config", () => {
   const mockMessageResolver = createMockMessageResolver("Error");
 
   const Alpine = createAlpineMock();
@@ -597,16 +584,16 @@ Deno.test("validate directive - no event listeners on all false config", () => {
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1] as Function;
+  const callback = directiveSpy.getCall(1).args[1] as Function;
 
   const mockElement = {
     id: "testField",
     name: "test",
     tagName: "text",
-    addEventListener: spy((_t: string, _h: () => void) => {}),
-    removeEventListener: spy((_t: string, _h: () => void) => {}),
-    setCustomValidity: () => {},
-    dispatchEvent: spy((_e: Event) => {}),
+    addEventListener: spy((_t: string, _h: () => void) => { }),
+    removeEventListener: spy((_t: string, _h: () => void) => { }),
+    setCustomValidity: () => { },
+    dispatchEvent: spy((_e: Event) => { }),
     checkValidity: () => false,
     reportValidity: spy(() => false),
     validity: {
@@ -623,7 +610,7 @@ Deno.test("validate directive - no event listeners on all false config", () => {
     _x_validation: undefined,
   };
 
-  const mockCleanUp = spy((_fn: any) => {});
+  const mockCleanUp = spy((_fn: any) => { });
 
   callback(
     mockElement as any,
@@ -636,20 +623,20 @@ Deno.test("validate directive - no event listeners on all false config", () => {
     } as unknown as DirectiveUtilities,
   );
 
-  assertSpyCalls(mockElement.addEventListener, 1);
-  assertStrictEquals(mockElement.addEventListener.calls[0].args[0], "change");
+  expect(mockElement.addEventListener.callCount).toBe(1);
+  expect(mockElement.addEventListener.getCall(0).args[0]).toBe("change");
 
   (mockElement._x_validation as any).formSubmit = true;
-  mockElement.addEventListener.calls[0].args[1]();
+  mockElement.addEventListener.getCall(0).args[1]();
 
-  assertSpyCalls(mockElement.reportValidity, 0);
+  expect(mockElement.reportValidity.callCount).toBe(0);
 
-  mockCleanUp.calls[0].args[0]();
+  mockCleanUp.getCall(0).args[0]();
 
   directiveSpy.restore();
 });
 
-Deno.test("validate directive - calls reportValidity on failure with report option", () => {
+test("validate directive - calls reportValidity on failure with report option", () => {
   const mockMessageResolver = createMockMessageResolver("Error");
 
   const Alpine = createAlpineMock();
@@ -666,16 +653,16 @@ Deno.test("validate directive - calls reportValidity on failure with report opti
     },
   )(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1] as Function;
+  const callback = directiveSpy.getCall(1).args[1] as Function;
 
   const mockElement = {
     id: "testField",
     name: "test",
     tagName: "text",
-    addEventListener: spy((_t: string, _h: () => void) => {}),
-    removeEventListener: spy((_t: string, _h: () => void) => {}),
-    setCustomValidity: () => {},
-    dispatchEvent: spy((_e: Event) => {}),
+    addEventListener: spy((_t: string, _h: () => void) => { }),
+    removeEventListener: spy((_t: string, _h: () => void) => { }),
+    setCustomValidity: () => { },
+    dispatchEvent: spy((_e: Event) => { }),
     checkValidity: spy(() => false),
     reportValidity: spy(() => false),
     validity: {
@@ -692,7 +679,7 @@ Deno.test("validate directive - calls reportValidity on failure with report opti
     _x_validation: undefined,
   };
 
-  const mockCleanUp = spy((_fn: any) => {});
+  const mockCleanUp = spy((_fn: any) => { });
 
   callback(
     mockElement as any,
@@ -705,30 +692,30 @@ Deno.test("validate directive - calls reportValidity on failure with report opti
     } as unknown as DirectiveUtilities,
   );
 
-  assertSpyCalls(mockElement.addEventListener, 1);
-  assertStrictEquals(mockElement.addEventListener.calls[0].args[0], "change");
+  expect(mockElement.addEventListener.callCount).toBe(1);
+  expect(mockElement.addEventListener.getCall(0).args[0]).toBe("change");
 
-  assertSpyCalls(mockElement.reportValidity, 0);
-  assertSpyCalls(mockElement.checkValidity, 0);
+  expect(mockElement.reportValidity.callCount).toBe(0);
+  expect(mockElement.checkValidity.callCount).toBe(0);
 
   (mockElement._x_validation as any).formSubmit = true;
-  mockElement.addEventListener.calls[0].args[1]();
+  mockElement.addEventListener.getCall(0).args[1]();
 
-  assertSpyCalls(mockElement.reportValidity, 1);
-  assertSpyCalls(mockElement.checkValidity, 2);
+  expect(mockElement.reportValidity.callCount).toBe(1);
+  expect(mockElement.checkValidity.callCount).toBe(2);
 
-  mockCleanUp.calls[0].args[0]();
+  mockCleanUp.getCall(0).args[0]();
 
   directiveSpy.restore();
 });
 
-Deno.test("validate directive - registers event listeners for checkboxes and radios", () => {
+test("validate directive - registers event listeners for checkboxes and radios", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
   createValidatePluginDefault(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1] as Function;
+  const callback = directiveSpy.getCall(1).args[1] as Function;
 
   const jsdom = new JSDOM(
     `<!DOCTYPE html>
@@ -805,7 +792,7 @@ Deno.test("validate directive - registers event listeners for checkboxes and rad
   const radio4addEventListener = spy(radio4, "addEventListener");
   const radio4removeEventListener = spy(radio4, "removeEventListener");
 
-  const cleanup1 = spy((_fn: any) => {});
+  const cleanup1 = spy((_fn: any) => { });
   callback(
     checkbox1 as any,
     { expression: "" } as DirectiveData,
@@ -815,7 +802,7 @@ Deno.test("validate directive - registers event listeners for checkboxes and rad
     } as unknown as DirectiveUtilities,
   );
 
-  const cleanup2 = spy((_fn: any) => {});
+  const cleanup2 = spy((_fn: any) => { });
   callback(
     radio1 as any,
     { expression: "" } as DirectiveData,
@@ -825,113 +812,113 @@ Deno.test("validate directive - registers event listeners for checkboxes and rad
     } as unknown as DirectiveUtilities,
   );
 
-  assertExists((checkbox1 as any)._x_validation);
-  assertExists((radio1 as any)._x_validation);
+  expect((checkbox1 as any)._x_validation).toBeDefined();
+  expect((radio1 as any)._x_validation).toBeDefined();
 
-  assertSpyCalls(text1addEventListener, 0);
-  assertSpyCalls(text1removeEventListener, 0);
+  expect(text1addEventListener.callCount).toBe(0);
+  expect(text1removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(text2addEventListener, 0);
-  assertSpyCalls(text2removeEventListener, 0);
+  expect(text2addEventListener.callCount).toBe(0);
+  expect(text2removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox1addEventListener, 1);
-  assertSpyCalls(checkbox1removeEventListener, 0);
+  expect(checkbox1addEventListener.callCount).toBe(1);
+  expect(checkbox1removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox2addEventListener, 0);
-  assertSpyCalls(checkbox2removeEventListener, 0);
+  expect(checkbox2addEventListener.callCount).toBe(0);
+  expect(checkbox2removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox3addEventListener, 0);
-  assertSpyCalls(checkbox3removeEventListener, 0);
+  expect(checkbox3addEventListener.callCount).toBe(0);
+  expect(checkbox3removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox4addEventListener, 0);
-  assertSpyCalls(checkbox4removeEventListener, 0);
+  expect(checkbox4addEventListener.callCount).toBe(0);
+  expect(checkbox4removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio1addEventListener, 1);
-  assertSpyCalls(radio1removeEventListener, 0);
+  expect(radio1addEventListener.callCount).toBe(1);
+  expect(radio1removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio2addEventListener, 0);
-  assertSpyCalls(radio2removeEventListener, 0);
+  expect(radio2addEventListener.callCount).toBe(0);
+  expect(radio2removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio3addEventListener, 0);
-  assertSpyCalls(radio3removeEventListener, 0);
+  expect(radio3addEventListener.callCount).toBe(0);
+  expect(radio3removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio4addEventListener, 0);
-  assertSpyCalls(radio4removeEventListener, 0);
+  expect(radio4addEventListener.callCount).toBe(0);
+  expect(radio4removeEventListener.callCount).toBe(0);
 
   (checkbox1 as any)._x_validation.validate();
   (radio1 as any)._x_validation.validate();
 
-  assertSpyCalls(text1addEventListener, 0);
-  assertSpyCalls(text1removeEventListener, 0);
+  expect(text1addEventListener.callCount).toBe(0);
+  expect(text1removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(text2addEventListener, 0);
-  assertSpyCalls(text2removeEventListener, 0);
+  expect(text2addEventListener.callCount).toBe(0);
+  expect(text2removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox1addEventListener, 1);
-  assertSpyCalls(checkbox1removeEventListener, 0);
+  expect(checkbox1addEventListener.callCount).toBe(1);
+  expect(checkbox1removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox2addEventListener, 1);
-  assertSpyCalls(checkbox2removeEventListener, 0);
+  expect(checkbox2addEventListener.callCount).toBe(1);
+  expect(checkbox2removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox3addEventListener, 0);
-  assertSpyCalls(checkbox3removeEventListener, 0);
+  expect(checkbox3addEventListener.callCount).toBe(0);
+  expect(checkbox3removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox4addEventListener, 0);
-  assertSpyCalls(checkbox4removeEventListener, 0);
+  expect(checkbox4addEventListener.callCount).toBe(0);
+  expect(checkbox4removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio1addEventListener, 1);
-  assertSpyCalls(radio1removeEventListener, 0);
+  expect(radio1addEventListener.callCount).toBe(1);
+  expect(radio1removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio2addEventListener, 1);
-  assertSpyCalls(radio2removeEventListener, 0);
+  expect(radio2addEventListener.callCount).toBe(1);
+  expect(radio2removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio3addEventListener, 0);
-  assertSpyCalls(radio3removeEventListener, 0);
+  expect(radio3addEventListener.callCount).toBe(0);
+  expect(radio3removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio4addEventListener, 0);
-  assertSpyCalls(radio4removeEventListener, 0);
+  expect(radio4addEventListener.callCount).toBe(0);
+  expect(radio4removeEventListener.callCount).toBe(0);
 
-  cleanup1.calls[0].args[0]();
-  cleanup2.calls[0].args[0]();
-  assertFalse("_x_validation" in checkbox1);
-  assertFalse("_x_validation" in radio2);
+  cleanup1.getCall(0).args[0]();
+  cleanup2.getCall(0).args[0]();
+  expect("_x_validation" in checkbox1).toBe(false);
+  expect("_x_validation" in radio2).toBe(false);
 
-  assertSpyCalls(text1addEventListener, 0);
-  assertSpyCalls(text1removeEventListener, 0);
+  expect(text1addEventListener.callCount).toBe(0);
+  expect(text1removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(text2addEventListener, 0);
-  assertSpyCalls(text2removeEventListener, 0);
+  expect(text2addEventListener.callCount).toBe(0);
+  expect(text2removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox1addEventListener, 1);
-  assertSpyCalls(checkbox1removeEventListener, 1);
+  expect(checkbox1addEventListener.callCount).toBe(1);
+  expect(checkbox1removeEventListener.callCount).toBe(1);
 
-  assertSpyCalls(checkbox2addEventListener, 1);
-  assertSpyCalls(checkbox2removeEventListener, 1);
+  expect(checkbox2addEventListener.callCount).toBe(1);
+  expect(checkbox2removeEventListener.callCount).toBe(1);
 
-  assertSpyCalls(checkbox3addEventListener, 0);
-  assertSpyCalls(checkbox3removeEventListener, 0);
+  expect(checkbox3addEventListener.callCount).toBe(0);
+  expect(checkbox3removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(checkbox4addEventListener, 0);
-  assertSpyCalls(checkbox4removeEventListener, 0);
+  expect(checkbox4addEventListener.callCount).toBe(0);
+  expect(checkbox4removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio1addEventListener, 1);
-  assertSpyCalls(radio1removeEventListener, 1);
+  expect(radio1addEventListener.callCount).toBe(1);
+  expect(radio1removeEventListener.callCount).toBe(1);
 
-  assertSpyCalls(radio2addEventListener, 1);
-  assertSpyCalls(radio2removeEventListener, 1);
+  expect(radio2addEventListener.callCount).toBe(1);
+  expect(radio2removeEventListener.callCount).toBe(1);
 
-  assertSpyCalls(radio3addEventListener, 0);
-  assertSpyCalls(radio3removeEventListener, 0);
+  expect(radio3addEventListener.callCount).toBe(0);
+  expect(radio3removeEventListener.callCount).toBe(0);
 
-  assertSpyCalls(radio4addEventListener, 0);
-  assertSpyCalls(radio4removeEventListener, 0);
+  expect(radio4addEventListener.callCount).toBe(0);
+  expect(radio4removeEventListener.callCount).toBe(0);
 
   (globalThis as any).CustomEvent = CustomEventBk;
 
   directiveSpy.restore();
 });
 
-Deno.test("validate directive - Handles listeners for standalone checkboxes and radios without a form", () => {
+test("validate directive - Handles listeners for standalone checkboxes and radios without a form", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
@@ -944,7 +931,7 @@ Deno.test("validate directive - Handles listeners for standalone checkboxes and 
     },
   })(Alpine);
 
-  const callback = directiveSpy.calls[1].args[1] as Function;
+  const callback = directiveSpy.getCall(1).args[1] as Function;
 
   const jsdom = new JSDOM(
     `<!DOCTYPE html>
@@ -973,7 +960,7 @@ Deno.test("validate directive - Handles listeners for standalone checkboxes and 
   const radio1addEventListener = spy(radio1, "addEventListener");
   const radio1removeEventListener = spy(radio1, "removeEventListener");
 
-  const cleanup1 = spy((_fn: any) => {});
+  const cleanup1 = spy((_fn: any) => { });
   callback(
     checkbox1 as any,
     { expression: "" } as DirectiveData,
@@ -983,7 +970,7 @@ Deno.test("validate directive - Handles listeners for standalone checkboxes and 
     } as unknown as DirectiveUtilities,
   );
 
-  const cleanup2 = spy((_fn: any) => {});
+  const cleanup2 = spy((_fn: any) => { });
   callback(
     radio1 as any,
     { expression: "" } as DirectiveData,
@@ -993,28 +980,28 @@ Deno.test("validate directive - Handles listeners for standalone checkboxes and 
     } as unknown as DirectiveUtilities,
   );
 
-  assertExists((checkbox1 as any)._x_validation);
-  assertExists((radio1 as any)._x_validation);
+  expect((checkbox1 as any)._x_validation).toBeDefined();
+  expect((radio1 as any)._x_validation).toBeDefined();
 
-  assertSpyCalls(radio1addEventListener, 1);
-  assertSpyCalls(radio1removeEventListener, 0);
+  expect(radio1addEventListener.callCount).toBe(1);
+  expect(radio1removeEventListener.callCount).toBe(0);
 
   (checkbox1 as any)._x_validation.validate();
   (radio1 as any)._x_validation.validate();
 
-  assertSpyCalls(checkbox1addEventListener, 1);
-  assertSpyCalls(checkbox1removeEventListener, 0);
-  assertSpyCalls(radio1addEventListener, 1);
-  assertSpyCalls(radio1removeEventListener, 0);
+  expect(checkbox1addEventListener.callCount).toBe(1);
+  expect(checkbox1removeEventListener.callCount).toBe(0);
+  expect(radio1addEventListener.callCount).toBe(1);
+  expect(radio1removeEventListener.callCount).toBe(0);
 
-  cleanup1.calls[0].args[0]();
-  cleanup2.calls[0].args[0]();
-  assertFalse("_x_validation" in checkbox1);
-  assertSpyCalls(checkbox1addEventListener, 1);
-  assertSpyCalls(checkbox1removeEventListener, 1);
+  cleanup1.getCall(0).args[0]();
+  cleanup2.getCall(0).args[0]();
+  expect("_x_validation" in checkbox1).toBe(false);
+  expect(checkbox1addEventListener.callCount).toBe(1);
+  expect(checkbox1removeEventListener.callCount).toBe(1);
 
-  assertSpyCalls(radio1addEventListener, 1);
-  assertSpyCalls(radio1removeEventListener, 1);
+  expect(radio1addEventListener.callCount).toBe(1);
+  expect(radio1removeEventListener.callCount).toBe(1);
 
   (globalThis as any).CustomEvent = CustomEventBk;
 
@@ -1023,7 +1010,7 @@ Deno.test("validate directive - Handles listeners for standalone checkboxes and 
 
 // validate-message-for
 
-Deno.test("validate-message-for directive - shows validation message", () => {
+test("validate-message-for directive - shows validation message", () => {
   const Alpine = createAlpineMock();
   const directiveSpy = spy(Alpine, "directive");
 
@@ -1037,7 +1024,7 @@ Deno.test("validate-message-for directive - shows validation message", () => {
     },
   })(Alpine);
 
-  const callback = directiveSpy.calls[2].args[1] as Function;
+  const callback = directiveSpy.getCall(2).args[1] as Function;
 
   const mockElement = {
     textContent: "",
@@ -1055,7 +1042,7 @@ Deno.test("validate-message-for directive - shows validation message", () => {
     { effect: (fn: Function) => fn() } as unknown as DirectiveUtilities,
   );
 
-  assertStrictEquals(mockElement.textContent, "Error message");
+  expect(mockElement.textContent).toBe("Error message");
 
   callback(
     mockElement as any,
@@ -1063,7 +1050,7 @@ Deno.test("validate-message-for directive - shows validation message", () => {
     { effect: (fn: Function) => fn() } as unknown as DirectiveUtilities,
   );
 
-  assertStrictEquals(mockElement.textContent, "");
+  expect(mockElement.textContent).toBe("");
 
   delete (globalThis as any).document;
   directiveSpy.restore();

@@ -122,14 +122,14 @@ export type ValidationConfig = {
  */
 export type ValidationOption = {
   [key: string]:
-    | [ValidatorFunction, FunctionParameter]
-    | [ValidatorFunction, FunctionParameter[]]
-    | FunctionParameter
-    | FunctionParameter[]
-    | {
-      v?: ValidatorFunction | FunctionParameter | FunctionParameter[];
-      m: FunctionParameter | FunctionParameter[];
-    };
+  | [ValidatorFunction, FunctionParameter]
+  | [ValidatorFunction, FunctionParameter[]]
+  | FunctionParameter
+  | FunctionParameter[]
+  | {
+    v?: ValidatorFunction | FunctionParameter | FunctionParameter[];
+    m: FunctionParameter | FunctionParameter[];
+  };
 };
 
 /**

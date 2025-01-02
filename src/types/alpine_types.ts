@@ -3,10 +3,7 @@
  *
  * This module extends the Alpine interface to include additional functionality.
  */
-
-// @deno-types="@types/alpinejs"
 import type { Alpine } from "alpinejs";
-// @deno-types="@types/alpinejs"
 export type { Alpine } from "alpinejs";
 
 /**
