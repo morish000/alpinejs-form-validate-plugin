@@ -10,7 +10,7 @@ await build({
   ],
   outdir: "dist",
   format: "esm",
-  bundle: true,
+  bundle: false,
   minify: true,
   sourcemap: true,
   resolveExtensions: [".ts"],
