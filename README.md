@@ -2,39 +2,6 @@
 > machine translated. For the original, please refer to
 > [README_ja.md](https://github.com/morish000/alpinejs-form-validate-plugin/blob/main/README_ja.md).
 
-# Project Status
-
-This project was built using Deno + JSR.io, but since late December 2024, I've encountered publishing errors and am unable to update it.  
-
-I have been unable to resolve this issue, so I am planning to migrate to Node.js + NPM, but the migration has not been completed.
-
-```
-error: Failed to publish @morish000/alpinejs-form-validate-plugin@0.1.5
-
-Caused by:
-    Failed to publish @morish000/alpinejs-form-validate-plugin at 0.1.5: failed to generate documentation: Failed resolving 'npm:alpinejs@3.14.x' from 'file:///src/alpinejs_form_validate_plugin.ts'.
-    
-    Stack backtrace:
-       0: anyhow::error::<impl core::convert::From<E> for anyhow::Error>::from
-       1: registry_api::docs::generate_docs::{{closure}}
-       2: registry_api::docs::generate_docs
-       3: registry_api::analysis::analyze_package_inner::{{closure}}::{{closure}}
-       4: <tracing::instrument::Instrumented<T> as core::future::future::Future>::poll
-       5: registry_api::analysis::analyze_package::{{closure}}
-       6: tokio::runtime::runtime::Runtime::block_on
-       7: registry_api::analysis::analyze_package
-       8: tokio::runtime::task::core::Core<T,S>::poll
-       9: tokio::runtime::task::harness::Harness<T,S>::poll
-      10: tokio::runtime::blocking::pool::Inner::run
-      11: std::sys::backtrace::__rust_begin_short_backtrace
-      12: core::ops::function::FnOnce::call_once{{vtable.shim}}
-      13: std::sys::pal::unix::thread::Thread::new::thread_start
-      14: <unknown>
-      15: <unknown>
-```
-
-Unable to avoid the same error, the following project has also been migrated from Deno + JSR to Node.js + NPM. : [markdown-it-extrajs](https://github.com/morish000/markdown-it-extrajs/tree/main/markdown-it-extrajs.old)
-
 # Form Validate Plugin for Alpine.js
 
 This is a plugin for performing `form validation` with
@@ -90,11 +57,11 @@ You can obtain it from `esm.sh` as follows:
 <script type="importmap">
   {
     "imports": {
-      "@morish000/alpinejs_form_validate_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin",
-      "@morish000/alpinejs_form_validate_plugin/plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/plugin",
-      "@morish000/alpinejs_form_validate_plugin/functions": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/functions",
-      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/alpinejs_i18next_plugin",
-      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/i18next_message_resolver"
+      "@morish000/alpinejs_form_validate_plugin": "https://esm.sh/@morish000/alpinejs-form-validate-plugin",
+      "@morish000/alpinejs_form_validate_plugin/plugin": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/plugin",
+      "@morish000/alpinejs_form_validate_plugin/functions": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/functions",
+      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/i18next/alpinejs_i18next_plugin",
+      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/i18next/i18next_message_resolver"
     }
   }
 </script>

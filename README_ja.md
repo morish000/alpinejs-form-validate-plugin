@@ -1,36 +1,3 @@
-# Project Status
-
-このプロジェクトはDeno + JSR.ioを使用していましたが、2024年12月後半からPublishエラーが発生し、更新できなくなりました。  
-
-この問題を解決できませんでしたので、Node.js + NPMへの移行を計画していますが、完了していません。
-
-```
-error: Failed to publish @morish000/alpinejs-form-validate-plugin@0.1.5
-
-Caused by:
-    Failed to publish @morish000/alpinejs-form-validate-plugin at 0.1.5: failed to generate documentation: Failed resolving 'npm:alpinejs@3.14.x' from 'file:///src/alpinejs_form_validate_plugin.ts'.
-    
-    Stack backtrace:
-       0: anyhow::error::<impl core::convert::From<E> for anyhow::Error>::from
-       1: registry_api::docs::generate_docs::{{closure}}
-       2: registry_api::docs::generate_docs
-       3: registry_api::analysis::analyze_package_inner::{{closure}}::{{closure}}
-       4: <tracing::instrument::Instrumented<T> as core::future::future::Future>::poll
-       5: registry_api::analysis::analyze_package::{{closure}}
-       6: tokio::runtime::runtime::Runtime::block_on
-       7: registry_api::analysis::analyze_package
-       8: tokio::runtime::task::core::Core<T,S>::poll
-       9: tokio::runtime::task::harness::Harness<T,S>::poll
-      10: tokio::runtime::blocking::pool::Inner::run
-      11: std::sys::backtrace::__rust_begin_short_backtrace
-      12: core::ops::function::FnOnce::call_once{{vtable.shim}}
-      13: std::sys::pal::unix::thread::Thread::new::thread_start
-      14: <unknown>
-      15: <unknown>
-```
-
-同じエラーを回避できず、以下のプロジェクトもDeno + JSRからNode.js + NPMに移行しました。: [markdown-it-extrajs](https://github.com/morish000/markdown-it-extrajs/tree/main/markdown-it-extrajs.old)
-
 # Form Validate Plugin for Alpine.js.
 
 [Alpine.js](https://alpinejs.dev/)で`Form Validation`を行うためのプラグインです。\
@@ -47,8 +14,7 @@ Caused by:
 - バリデーションロジックを外部定義して再利用できるようにする
 - メッセージを外部定義して再利用できるようにする
 
-メッセージの設定は[setCustomValidity](https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/setCustomValidity)を使用し、できるだけHTML5
-標準バリデーション合わせるように作成しています。
+メッセージの設定は[setCustomValidity](https://developer.mozilla.org/en-US/docs/Web/API/HTMLObjectElement/setCustomValidity)を使用し、できるだけHTML5 標準バリデーション合わせるように作成しています。
 
 **ラジオボタンとチェックボックスについて**：
 
@@ -79,11 +45,11 @@ ESMのみ対応しています。
 <script type="importmap">
   {
     "imports": {
-      "@morish000/alpinejs_form_validate_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin",
-      "@morish000/alpinejs_form_validate_plugin/plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/plugin",
-      "@morish000/alpinejs_form_validate_plugin/functions": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/functions",
-      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/alpinejs_i18next_plugin",
-      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://esm.sh/jsr/@morish000/alpinejs-form-validate-plugin/i18next/i18next_message_resolver"
+      "@morish000/alpinejs_form_validate_plugin": "https://esm.sh/@morish000/alpinejs-form-validate-plugin",
+      "@morish000/alpinejs_form_validate_plugin/plugin": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/plugin",
+      "@morish000/alpinejs_form_validate_plugin/functions": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/functions",
+      "@morish000/alpinejs_form_validate_plugin/i18next/alpinejs_i18next_plugin": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/i18next/alpinejs_i18next_plugin",
+      "@morish000/alpinejs_form_validate_plugin/i18next/i18next_message_resolver": "https://esm.sh/@morish000/alpinejs-form-validate-plugin/i18next/i18next_message_resolver"
     }
   }
 </script>
